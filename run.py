@@ -39,8 +39,8 @@ def select_search_type():
             search_by_artist_name()
         elif choice == 'B':
             search_by_song_title()
-        # elif choice == 'C':
-        #     search_by_genre()
+        elif choice == 'C':
+            search_by_genre()
         # elif choice == 'D':
         #     search_by_era()
     else:
@@ -75,6 +75,7 @@ def search_by_artist_name():
     return artists_song_list
 
 
+#Add validation maybe just a keyword search or first 6 letters etc.
 def search_by_song_title():
     """
     Enables user to search via the song title.
@@ -99,4 +100,37 @@ def search_by_song_title():
     return song_title_info
 
 
-select_search_type()
+def search_by_genre():
+    """
+    User can search by genre with this function. It extracts all rows with the
+    instance of the selected genre.
+    """
+    genres = ['rock', 'reggae', 'pop', 'hip hop', 'electronic', 'blues', 'indie']
+
+    print("""Please choose from one of the following genres:\n""")
+    for genre in genres:
+        print(genre.title())
+    
+    genre_choice = input("\nEnter genre of choice: ").lower()
+
+    if genre_choice in genres:
+        genre_list = SHEET.worksheet('library').findall(genre_choice)
+
+        for item in genre_list:
+            songs_in_genre = SHEET.worksheet('library').row_values(item.row)
+            print(songs_in_genre)
+    else:
+        print("""Sorry, we couldnt find that genre in our library. Please try 
+        again.\n""")
+        search_by_genre()
+    
+    return songs_in_genre
+
+
+def main():
+    """
+    Run all program functions
+    """
+    menu = select_search_type()
+
+main()
