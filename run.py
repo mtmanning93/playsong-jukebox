@@ -15,9 +15,28 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
 
-playlist = SHEET.worksheet('playlist')
+print("Welcome to Playsong Jukebox!\n")
 
-data = playlist.get_all_values()
 
-print(data)
+def select_search_type():
+    """
+    Provides search options for the user to select from.
+    """
+    print("Please begin by selecting a search method:\n\nA)Artist Name\nB)Song Title\nC)Genre\nD)Era\n")
+    choice = input("Please select a search method: ").upper()
 
+    if choice == 'A':
+        print("you chose a")
+    elif choice == 'B':
+        print("you chose b")
+    elif choice == 'C':
+        print("you chose c")
+    elif choice == 'D':
+        print("you chose d")
+    else:
+        print("\nPlease choose an option from A, B, C, or D.\n")
+
+    return choice
+
+        
+select_search_type()
