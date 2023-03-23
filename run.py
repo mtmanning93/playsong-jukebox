@@ -26,12 +26,13 @@ SEARCH_MENU = {
 
 def select_search_type():
     """
+    Main menu options.
     Provides search options for the user to select from.
     """
     while True:
         print("""Please begin by selecting a search method from the list below:
         \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
-        search_choice = input("""Please select a search type from a, b, c or d: """).upper()
+        search_choice = input("""Please select a search type from A, B, C, D: """).upper()
 
         if validate_choice(search_choice):
             break
@@ -71,35 +72,40 @@ def seperate_search_type(option):
 
         search_library(user_search)
 
+        return user_search
+
     elif option == 'C':
         # Provide list of genres for user
         print("Please select from the list of genres below.\n")
         for genre in GENRE_LIST:
             print(genre)
         print("")
-
+        
         while True:
             genre_input = input("Enter Genre: \n")
             print("")
 
             if validate_genre(genre_input):
-                print("Searching library for genre...\n")
+                print(f"Searching library for {genre_input}...\n")
                 break
 
         search_library(genre_input)
 
         return genre_input
+
     else:
-        # Search validation for year D
+        # Search validation for year
         while True:
+            # The try checks if value given is a number. 
+            # If not a Value Error is given.
             try:
                 year = int(input("Enter year between 1940 and now: \n"))
                 print("")
                 if validate_year(year):
-                    print("Searching library for year...\n")
                     break
             except ValueError:
-                print("\nNot a number! Please input a number. (example 1989)\n")     
+                print("""\nNot a number! Please input a number. 
+                (example 1989)\n""")     
 
         return year
 
@@ -122,16 +128,14 @@ def validate_genre(genre):
 
 def validate_year(num):
     """
-    Inside the try checks if input is 4 digits long
+    Inside the try checks if input is a valid date 
+    between 1940 and present year.
     and between 1940 and current year.
-    Raises error if not in dict.
+    Raises error if entered number is not in time frame.
     """
-    # num_int = int(num)
-    # print(num_int)
-    # print(type(num_int))
     try:
         if (num >= 1940 and num <= 2023):
-            print('\nSearching library...\n')
+            print(f"Searching library for {num}...\n")
             num_str = str(num)
             search_library(num_str)
         else:
@@ -148,27 +152,39 @@ def validate_year(num):
 
 def search_library(input):
     """
-    Takes input information and searches library for results
+    Takes input information from chosen search after validation
+    and searches through the library returning all results.
     """
     library = SHEET.worksheet('library').get_all_values()[1:]
     
     is_song_available = False
 
-    for item in library:
+    playlist = []
+
+    for tracks in library:
         
-        if input in item:
+        if input in tracks:
             is_song_available = True
-            print(item)
+            song = tracks  # to remove the link [:4]
+            playlist.append(tracks)
+            
+            for data in song:
+                print(data.title())
+            print("")
+
+    print(playlist)
 
     if not is_song_available:
         print(
             f"Sorry we cannot find {input} in our library. "
             f"Please try another search.\n"
         )
+        select_search_type()
 
+    return is_song_available
 
 
 print("Welcome to Playsong Jukebox!\n")
 
-menu_choice = select_search_type() # THIS IS THE SELECTED METHOD (A/B/C/D)
+menu_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
 seperate_search_type(menu_choice)
