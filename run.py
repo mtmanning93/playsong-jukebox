@@ -150,7 +150,7 @@ def validate_year(num):
     return True
 
 
-def search_library(input):
+def search_library(search_input):
     """
     Takes input information from chosen search after validation
     and searches through the library returning all results.
@@ -163,16 +163,16 @@ def search_library(input):
 
     for tracks in library:
         
-        if input in tracks:
+        if search_input in tracks:
             is_song_available = True
-            song = tracks  # to remove the link [:4]
+            # song = tracks  # to remove the link [:4]
             playlist.append(tracks)
             
-            for data in song:
-                print(data.title())
-            print("")
-
-    print(playlist)
+    for song in playlist:
+        display = song[:4]
+        for data in display:
+            print(data.title())
+        print("")
 
     if not is_song_available:
         print(
