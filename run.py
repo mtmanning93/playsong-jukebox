@@ -184,7 +184,13 @@ def search_library(search_input):
     return is_song_available
 
 
-print("Welcome to Playsong Jukebox!\n")
+def main():
+    """
+    Run all program functions.
+    """
+    menu_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
+    seperate_search_type(menu_choice)
 
-menu_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
-seperate_search_type(menu_choice)
+
+print("Welcome to Playsong Jukebox!\n")
+main()
