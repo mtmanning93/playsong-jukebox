@@ -52,8 +52,8 @@ def validate_choice(value):
             raise ValueError(
                 f"Search type A, B, C, or D required. {value} is not valid.\n"
             )
-    except ValueError as e:
-        print(f"\nInvalid input: {e}Please try again.\n")
+    except ValueError as err:
+        print(f"\nInvalid input: {err}\n Please try again.\n")
         return False
 
     return True
@@ -121,8 +121,8 @@ def validate_genre(genre):
             raise ValueError(
                 f"Genre not in provided list. {genre} is not a valid input.\n"
             )
-    except ValueError as e:
-        print(f"\nInvalid input: {e}Please try again.\n")
+    except ValueError as err:
+        print(f"\nInvalid input: {err} \n Please try again.\n")
         return False
 
     return True
@@ -145,8 +145,8 @@ def validate_year(num):
                 f"Numeric 4 digit year between 1940 and now required (example:"
                 f" 1989). {num} is not valid.\n"
             )
-    except ValueError as e:
-        print(f"\nInvalid input: {e}Please try again.\n")
+    except ValueError as err:
+        print(f"\nInvalid input: {err}\n Please try again.\n")
         return False
 
     return True
@@ -173,12 +173,15 @@ def search_library(search_input):
     for song in playlist:
         display = song[:4]
         
-        for data in display:
-            print(data.title())
-        print("")
-    
+        # for data in display:
+        #     print(data.title())
+        # print("")
+
     # Scrollable menu
-    playlist_menu = TerminalMenu(display)
+    # list comprehension
+    playlist_menu = TerminalMenu(
+        [" ".join(song[:4]).title() for song in playlist]
+    )
     menu = playlist_menu.show()
     print(f"You have selected {playlist[menu]}!")
 
