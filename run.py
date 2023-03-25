@@ -1,6 +1,8 @@
 import gspread
 from google.oauth2.service_account import Credentials
 
+from simple_term_menu import TerminalMenu
+
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -167,12 +169,18 @@ def search_library(search_input):
             is_song_available = True
             # song = tracks  # to remove the link [:4]
             playlist.append(tracks)
-            
+
     for song in playlist:
         display = song[:4]
+        
         for data in display:
             print(data.title())
         print("")
+    
+    # Scrollable menu
+    playlist_menu = TerminalMenu(display)
+    menu = playlist_menu.show()
+    print(f"You have selected {playlist[menu]}!")
 
     if not is_song_available:
         print(
