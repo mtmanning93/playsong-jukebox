@@ -15,7 +15,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
 
 # Initial genre menu
-GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
+GENRE_LIST = ['Rock', 'Hip Hop', 'Electronic', 'Reggae', 'Indie', 'Blues']
 
 # Initial user menu
 SEARCH_MENU = {
@@ -121,8 +121,8 @@ def validate_genre(genre):
             raise ValueError(
                 f"Genre not in provided list. {genre} is not a valid input.\n"
             )
-    except ValueError as err:
-        print(f"\nInvalid input: {err} \n Please try again.\n")
+    except ValueError as error:
+        print(f"\nInvalid input: {error} \n Please try again.\n")
         return False
 
     return True
@@ -170,20 +170,18 @@ def search_library(search_input):
             # song = tracks  # to remove the link [:4]
             playlist.append(tracks)
 
-    for song in playlist:
-        display = song[:4]
-        
-        # for data in display:
-        #     print(data.title())
-        # print("")
-
     # Scrollable menu
     # list comprehension
     playlist_menu = TerminalMenu(
-        [" ".join(song[:4]).title() for song in playlist]
-    )
+        [" ".join(song[:4]).title() for song in playlist] + ['Quit']
+        )
     menu = playlist_menu.show()
-    print(f"You have selected {playlist[menu]}!")
+    chosen_song = playlist[menu]
+
+    print("\n".join(chosen_song[:4]).title() + "\n")
+    url = f"{chosen_song.pop()}\n"
+    print("Video link: \n")
+    print(url)
 
     if not is_song_available:
         print(
@@ -193,7 +191,7 @@ def search_library(search_input):
         select_search_type()
 
     return is_song_available
-
+ 
 
 def main():
     """
