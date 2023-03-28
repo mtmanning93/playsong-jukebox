@@ -1,3 +1,4 @@
+import time
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -13,9 +14,10 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
+JUKEBOX = SHEET.worksheet('library')
 
 # Initial genre menu
-GENRE_LIST = ['Rock', 'Hip Hop', 'Electronic', 'Reggae', 'Indie', 'Blues']
+GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
 
 # Initial user menu
 SEARCH_MENU = {
@@ -65,13 +67,15 @@ def seperate_search_type(option):
     Depending on search type!
     """
     search_name = SEARCH_MENU[option]
-    print(f"You selected to search via {option}) {search_name}...\n")
+    print(f"You selected to search via {option}) {search_name}.\n")
 
     if option == 'A' or option == 'B':
         
         user_search = input(f"Enter {search_name}: \n")
         print("")
 
+        print("Searching library...\n")
+        time.sleep(1)
         search_library(user_search)
 
         return user_search
@@ -80,7 +84,7 @@ def seperate_search_type(option):
         # Provide list of genres for user
         print("Please select from the list of genres below.\n")
         for genre in GENRE_LIST:
-            print(genre)
+            print(genre.title())
         print("")
         
         while True:
@@ -88,7 +92,7 @@ def seperate_search_type(option):
             print("")
 
             if validate_genre(genre_input):
-                print(f"Searching library for {genre_input}...\n")
+                print(f"Searching library for {genre_input.title()}...\n")
                 break
 
         search_library(genre_input)
@@ -119,10 +123,14 @@ def validate_genre(genre):
     try:
         if genre not in GENRE_LIST:
             raise ValueError(
-                f"Genre not in provided list. {genre} is not a valid input.\n"
+                f"{genre.title()} is not in provided options.\n"
+                
             )
     except ValueError as error:
-        print(f"\nInvalid input: {error} \n Please try again.\n")
+        print(
+            f"\nInvalid input: {error} \n"
+            f"Please select from provided genre list above.\n"
+            )
         return False
 
     return True
@@ -155,7 +163,8 @@ def validate_year(num):
 def search_library(search_input):
     """
     Takes input information from chosen search after validation
-    and searches through the library returning all results.
+    and searches through the library.
+    Adds available songs to playlist list.
     """
     library = SHEET.worksheet('library').get_all_values()[1:]
     
@@ -164,24 +173,10 @@ def search_library(search_input):
     playlist = []
 
     for tracks in library:
-        
         if search_input in tracks:
             is_song_available = True
-            # song = tracks  # to remove the link [:4]
             playlist.append(tracks)
-
-    # Scrollable menu
-    # list comprehension
-    playlist_menu = TerminalMenu(
-        [" ".join(song[:4]).title() for song in playlist] + ['Quit']
-        )
-    menu = playlist_menu.show()
-    chosen_song = playlist[menu]
-
-    print("\n".join(chosen_song[:4]).title() + "\n")
-    url = f"{chosen_song.pop()}\n"
-    print("Video link: \n")
-    print(url)
+    display_user_playlist(playlist)
 
     if not is_song_available:
         print(
@@ -192,6 +187,38 @@ def search_library(search_input):
 
     return is_song_available
  
+
+def display_user_playlist(songs):
+    """
+    Displays all songs generated in the playlist for the user to select from
+    Also displays quit as a restart method to return to the original main menu if needed
+    """
+    # Scrollable menu
+    # list comprehension
+    songs.append(['Quit'])
+    playlist_menu = TerminalMenu(
+        [" ".join(song[:4]).title() for song in songs]
+        )
+
+    restart = False
+
+    while restart is False:
+
+        menu = playlist_menu.show()
+        chosen_song = songs[menu]
+
+        if chosen_song == songs[-1]:
+            restart = True
+            print('Restarting search...\n')
+            time.sleep(1)
+            main()
+            break
+        else:
+            print("\n".join(chosen_song[:4]).title() + "\n")
+            url = f"{chosen_song.pop()}\n"
+            print("Video link (cmd/ctrl + click to open): \n")
+            print(url)
+
 
 def main():
     """
