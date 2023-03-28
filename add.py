@@ -38,19 +38,40 @@ def add_song():
 
     new_song = []
 
+    # artist
     input_artist = input("Please enter artists name: \n")
     new_song.append(input_artist)
-
+    print("")
+    # title
     input_title = input("Please enter song title: \n")
     new_song.append(input_title)
-
+    print("")
+    # genre
     input_genre = input("Please enter genre: \n")
     new_song.append(input_genre)
-
+    print("")
+    # year
     input_year = input("Please enter year of release: \n")
     new_song.append(input_year)
+    print("")
+    print("Adding:")
+    print(' '.join(new_song).title())
+    print("")
 
-    print(new_song)
+    new_song[3] = int(input_year)
+
+    update_library(new_song)
 
 
-add_song()
+def update_library(data):
+    """
+    Updates google sheet by adding new song to list
+    """
+    print("Updating library...\n")
+    JUKEBOX.append_row(data)
+    time.sleep(2)
+    print("Library updated.\n")
+
+
+add_entry = add_song()
+
