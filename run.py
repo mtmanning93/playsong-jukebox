@@ -1,4 +1,5 @@
 import time
+import validators
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -117,7 +118,6 @@ def add_song():
         print("")
         if validate_length(len(add_title)):
             break
-    
 
     # genre
     add_genre = input("Please enter genre: \n")
@@ -145,11 +145,15 @@ def add_song():
         )
     print(
         f'https://www.youtube.com/results?search_query='
-        f'{input_artist.replace(" ", "")}'
-        f'+{input_title.replace(" ", "")}\n'
+        f'{add_artist.replace(" ", "")}'
+        f'+{add_title.replace(" ", "")}\n'
         )
-    add_link = input("Paste url here: ")
-    new_song.append(add_link)
+    
+    while True:
+        add_link = input("Paste url here: ")
+        new_song.append(add_link)
+        if link_validation(add_link):
+            break
 
     print("")
     print("Adding:")
@@ -193,6 +197,22 @@ def update_genre_list(data, inst):
     print(data)
 
     return data
+
+
+def link_validation(link):
+    """
+    Validates whether the input pasted into the url input is a link
+    """
+    try:
+        if not validators.url(f"{link}"):
+            raise ValueError(
+                "Not a url. "
+            )
+    except ValueError as err:
+        print(f"\nInvalid input: {err}Please insert another url.\n")
+        return False
+
+    return True
 
 
 def update_library(data):
