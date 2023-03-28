@@ -17,7 +17,7 @@ SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
 JUKEBOX = SHEET.worksheet('library')
 
 # Initial genre menu
-GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
+GENRE_LIST = JUKEBOX.col_values(3)[1:]
 
 # Initial user menu
 SEARCH_MENU = {
@@ -26,6 +26,21 @@ SEARCH_MENU = {
     'C': 'Genre',
     'D': 'Year'
 }
+
+
+def update_genre_list(data, inst):
+    """
+    Searches list of genres.
+    Adds new genre input to list if not already in list.
+    """
+    for x in data:
+        if data.count(x) > inst:
+            while x in data:
+                data.remove(x) 
+
+    print(data)
+
+    return data
 
 
 def add_song():
@@ -47,9 +62,14 @@ def add_song():
     new_song.append(input_title)
     print("")
     # genre
-    input_genre = input("Please enter genre: \n")
-    new_song.append(input_genre)
+    add_genre = input("Please enter genre: \n")
+    new_song.append(add_genre.lower())
     print("")
+    # print(new_song)
+
+    if add_genre not in GENRE_LIST:
+        GENRE_LIST.append(add_genre.lower())
+    
     # year
     input_year = input("Please enter year of release: \n")
     new_song.append(input_year)
@@ -73,5 +93,5 @@ def update_library(data):
     print("Library updated.\n")
 
 
-add_entry = add_song()
-
+add_song()
+update_genre_list(GENRE_LIST, 1)
