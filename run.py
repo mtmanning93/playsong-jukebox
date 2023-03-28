@@ -68,6 +68,22 @@ def validate_main_choice(value):
     return True
 
 
+def main_menu_selection(option):
+    """
+    Takes users main menu selection and moves to the correct funnction.
+    """
+    menu_choice = MAIN_MENU[option]
+    print(f"You selected to {menu_choice}.\n")
+
+    if option == "A":
+        add_song()
+    elif option == "B":
+        print("remove song")
+        main()
+    else:
+        select_search_type()
+
+
 def add_song():
     """
     Enables user to add songs to the library
@@ -358,7 +374,8 @@ def main():
     """
     Run all program functions.
     """
-    main_menu()
+    main_choice = main_menu()
+    main_menu_selection(main_choice)
     add_song()
     search_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
     seperate_search_type(search_choice)
