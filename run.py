@@ -68,25 +68,33 @@ def validate_main_choice(value):
     return True
 
 
-def main_menu_selection(option):
+def main_menu_selection(opt):
     """
     Takes users main menu selection and moves to the correct funnction.
     """
-    menu_choice = MAIN_MENU[option]
+    menu_choice = MAIN_MENU[opt]
     print(f"You selected to {menu_choice}.\n")
 
-    if option == "A":
+    if opt == "A":
         add_song()
-    elif option == "B":
+    elif opt == "B":
         print("remove song")
         main()
     else:
         select_search_type()
 
+    return menu_choice
+
 
 def add_song():
     """
     Enables user to add songs to the library
+    Inputs:
+    1) artist name
+    2) song title
+    3) genre
+    4) year
+    5) youtube url
     """
     print(
         "To add a song to the jukebox please follow the steps below. \n"
@@ -95,13 +103,22 @@ def add_song():
     new_song = []
 
     # artist
-    input_artist = input("Please enter artists name: \n")
-    new_song.append(input_artist)
-    print("")
+    while True:
+        add_artist = input("Please enter artist name: \n")
+        new_song.append(add_artist)
+        print("")
+        if validate_length(len(add_artist)):
+            break
+    
     # title
-    input_title = input("Please enter song title: \n")
-    new_song.append(input_title)
-    print("")
+    while True:
+        add_title = input("Please enter song title: \n")
+        new_song.append(add_title)
+        print("")
+        if validate_length(len(add_title)):
+            break
+    
+
     # genre
     add_genre = input("Please enter genre: \n")
     new_song.append(add_genre.lower())
@@ -121,7 +138,7 @@ def add_song():
             print("""\nNot a number! Please input a number. 
             (example 1989)\n""")
 
-    # youtube link
+    # Youtube
     print(
         """Use the link below to find a video of your choice.
         (cmd/ctrl + click to open)"""
@@ -142,6 +159,24 @@ def add_song():
     new_song[3] = int(add_year)
 
     update_library(new_song)
+
+
+def validate_length(wrd):
+    """
+    Validates that an input string is not too long.
+    Limit to 20 characters.
+
+    """
+    try:
+        if wrd > 20:
+            raise ValueError(
+                f"Maximum 20 characters allowed. {wrd} is too long.\n"
+            )
+    except ValueError as err:
+        print(f"\nInvalid input: {err}Please shorten your input.\n")
+        return False
+
+    return True
 
 
 def update_genre_list(data, inst):
@@ -184,6 +219,7 @@ def select_search_type():
         search_choice = input("""Please select a search type from A, B, C, D: """).upper()
 
         if validate_search_choice(search_choice):
+            seperate_search_type(search_choice)
             break
     
     return search_choice
@@ -216,8 +252,11 @@ def seperate_search_type(option):
 
     if option == 'A' or option == 'B':
         
-        user_search = input(f"Enter {search_name}: \n")
-        print("")
+        while True:
+            user_search = input(f"Enter {search_name}: \n")
+            print("")
+            if validate_length(len(user_search)):
+                break
 
         print("Searching library...\n")
         time.sleep(1)
@@ -359,15 +398,15 @@ def display_user_playlist(songs):
 
         if chosen_song == songs[-1]:
             restart = True
-            print('Restarting search...\n')
+            print('Restarting Jukebox...\n')
             time.sleep(1)
             main()
             break
-        else:
-            print("\n".join(chosen_song[:4]).title() + "\n")
-            url = f"{chosen_song.pop()}\n"
-            print("Video link (cmd/ctrl + click to open): \n")
-            print(url)
+        
+        print("\n".join(chosen_song[:4]).title() + "\n")
+        url = f"{chosen_song.pop()}\n"
+        print("Video link (cmd/ctrl + click to open): \n")
+        print(url)
 
 
 def main():
