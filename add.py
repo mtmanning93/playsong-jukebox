@@ -38,8 +38,6 @@ def update_genre_list(data, inst):
             while x in data:
                 data.remove(x) 
 
-    print(data)
-
     return data
 
 
@@ -65,17 +63,37 @@ def add_song():
     add_genre = input("Please enter genre: \n")
     new_song.append(add_genre.lower())
     print("")
-    # print(new_song)
 
     if add_genre not in GENRE_LIST:
         GENRE_LIST.append(add_genre.lower())
     
     # year
-    input_year = input("Please enter year of release: \n")
-    new_song.append(input_year)
+    while True:
+        try:
+            add_year = input("Please enter year of release: \n")
+            new_song.append(add_year)
+            if validate_year(int(add_year)):
+                break
+        except ValueError:
+            print("""\nNot a number! Please input a number. 
+            (example 1989)\n""")
+
+    # youtube link
+    print(
+        """Use the link below to find a video of your choice.
+        (cmd/ctrl + click to open)"""
+        )
+    print(
+        f'https://www.youtube.com/results?search_query='
+        f'{input_artist.replace(" ", "")}'
+        f'+{input_title.replace(" ", "")}\n'
+        )
+    add_link = input("Paste url here: ")
+    new_song.append(add_link)
+
     print("")
     print("Adding:")
-    print(' '.join(new_song).title())
+    print(' - '.join(new_song[:2]).title())
     print("")
 
     new_song[3] = int(input_year)
