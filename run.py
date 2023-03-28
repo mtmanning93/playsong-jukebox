@@ -20,6 +20,12 @@ JUKEBOX = SHEET.worksheet('library')
 # GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
 GENRE_LIST = JUKEBOX.col_values(3)[1:]
 
+MAIN_MENU = {
+    'A': "add song",
+    'B': "remove song",
+    'C': "search song"
+}
+
 # Initial user menu
 SEARCH_MENU = {
     'A': 'Artist Name',
@@ -27,6 +33,39 @@ SEARCH_MENU = {
     'C': 'Genre',
     'D': 'Year'
 }
+
+
+def main_menu():
+    """
+    Main menu function enables user to select between
+    Add, Remove, or Search song.
+    """
+    while True:
+        print("""Please begin by selecting from the menu below:
+        \nA) Add Song\nB) Remove Song\nC) Search Jukebox\n""")
+        main_menu_choice = input("""Please select a menu choice type from A, B, C: """).upper()
+
+        if validate_main_choice(main_menu_choice):
+            break
+    
+    return main_menu_choice
+
+
+def validate_main_choice(value):
+    """
+    Inside the try checks if input is in SEARCH_MENU dict.
+    Raises error if not in dict.
+    """
+    try:
+        if value not in MAIN_MENU.keys():
+            raise ValueError(
+                f"Search type A, B, C required. {value} is not valid.\n"
+            )
+    except ValueError as err:
+        print(f"\nInvalid input: {err}\n Please try again.\n")
+        return False
+
+    return True
 
 
 def add_song():
@@ -120,7 +159,7 @@ def update_library(data):
 
 def select_search_type():
     """
-    Main menu options.
+    Search menu options.
     Provides search options for the user to select from.
     """
     while True:
@@ -128,13 +167,13 @@ def select_search_type():
         \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
         search_choice = input("""Please select a search type from A, B, C, D: """).upper()
 
-        if validate_choice(search_choice):
+        if validate_search_choice(search_choice):
             break
     
     return search_choice
 
 
-def validate_choice(value):
+def validate_search_choice(value):
     """
     Inside the try checks if input is in SEARCH_MENU dict.
     Raises error if not in dict.
@@ -319,9 +358,10 @@ def main():
     """
     Run all program functions.
     """
+    main_menu()
     add_song()
-    menu_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
-    seperate_search_type(menu_choice)
+    search_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
+    seperate_search_type(search_choice)
     update_genre_list(GENRE_LIST, 1)
 
 
