@@ -1,4 +1,5 @@
 import time
+import os
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
@@ -43,7 +44,7 @@ def main_menu():
     """
     while True:
         print("""Please begin by selecting from the menu below:
-        \nA) Add Song\nB) Remove Song\nC) Search Jukebox\n""")
+        \nA) Add Song\nB) Remove Song\nC) Search JukeboX\n""")
         main_menu_choice = input("""Please select a menu choice type from A, B, C: """).upper()
 
         if validate_main_choice(main_menu_choice):
@@ -95,39 +96,35 @@ def add_song():
     2) song title
     3) genre
     4) year
-    5) youtube url
+    5) url
     """
     print(
-        "To add a song to the jukebox please follow the steps below. \n"
+        "To add a song to JukeboX please follow the steps below. \n"
     )
 
     new_song = []
-
-    # artist
+    # Artist
     while True:
         add_artist = input("Please enter artist name: \n")
         new_song.append(add_artist)
         print("")
         if validate_length(len(add_artist)):
             break
-    
-    # title
+    # Title
     while True:
         add_title = input("Please enter song title: \n")
         new_song.append(add_title)
         print("")
         if validate_length(len(add_title)):
             break
-
-    # genre
+    # Genre
     add_genre = input("Please enter genre: \n")
     new_song.append(add_genre.lower())
     print("")
 
     if add_genre not in GENRE_LIST:
-        GENRE_LIST.append(add_genre.lower())
-    
-    # year
+        GENRE_LIST.append(add_genre.lower())   
+    # Year
     while True:
         try:
             add_year = input("Please enter year of release: \n")
@@ -137,8 +134,7 @@ def add_song():
         except ValueError:
             print("""\nNot a number! Please input a number. 
             (example 1989)\n""")
-
-    # Youtube
+    # Link
     print(
         """Use the link below to find a video of your choice.
         (cmd/ctrl + click to open)"""
@@ -148,7 +144,6 @@ def add_song():
         f'{add_artist.replace(" ", "")}'
         f'+{add_title.replace(" ", "")}\n'
         )
-    
     while True:
         add_link = input("Paste url here: ")
         new_song.append(add_link)
@@ -163,6 +158,8 @@ def add_song():
     new_song[3] = int(add_year)
 
     update_library(new_song)
+
+    return new_song
 
 
 def validate_length(wrd):
@@ -222,9 +219,10 @@ def update_library(data):
     print("Updating library...\n")
     JUKEBOX.append_row(data)
     time.sleep(2)
-    print("Library updated.\n")
-    time.sleep(1)
+    print("Library updated. Restarting JukeboX...\n")
+    time.sleep(5)
     # clear terminal here
+    os.system('clear')
     main()
 
 
@@ -441,5 +439,6 @@ def main():
     update_genre_list(GENRE_LIST, 1)
 
 
-print("Welcome to Playsong Jukebox!\n")
+print("")
+print("Welcome to JukeboX!\n")
 main()
