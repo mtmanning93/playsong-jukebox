@@ -88,6 +88,59 @@ def main_menu_selection(opt):
     return menu_choice
 
 
+def remove_song():
+    """
+    Enables user to remove song from library
+    by displaying a menu to select from.
+    """
+    print(
+        "To remove a song from JukeboX please follow the steps below. \n"
+        )
+    delete_song = input("Enter song title to remove: ").lower()
+    print("")
+    
+    titles = JUKEBOX.col_values(2)
+
+    for rows in titles:
+        if delete_song in rows:
+            row_num = titles.index(delete_song) + 1
+            row_info = JUKEBOX.row_values(row_num)
+            print("Are you sure you would like to permanently delete:\n")
+            print("\n".join(row_info[:4]).title())
+            break
+
+    while True:
+    
+        answer = input("\nEnter Y / N: ").upper()
+        print(answer)
+
+        if validate_y_or_n(answer):
+            if answer == "Y":
+                print('delete')
+            else:
+                main()
+            break
+
+    return answer            #JUKEBOX.delete_row(row_num)
+            
+
+def validate_y_or_n(a):
+    """
+    Inside the try checks if input is y or n.
+    Raises error if anything is input.
+    """
+    try:
+        if a not in ("N", "Y"):
+            raise ValueError(
+                f"Answer 'y' for yes or 'n' for no. {a} is not valid.\n"
+            )
+    except ValueError as err:
+        print(f"\nInvalid input: {err}\nPlease try again.")
+        return False
+
+    return True
+
+
 def add_song():
     """
     Enables user to add songs to the library via these inputs:
