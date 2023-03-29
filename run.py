@@ -112,16 +112,25 @@ def remove_song():
     while True:
     
         answer = input("\nEnter Y / N: ").upper()
-        print(answer)
+        print("")
 
         if validate_y_or_n(answer):
             if answer == "Y":
-                print('delete')
+                print("Deleting...\n")
+                time.sleep(1)
+                JUKEBOX.delete_rows(row_num)
+                print('Song deleted from JukeboX. Restarting JukeboX...')
+                time.sleep(3.5)
+                os.system('clear')
+                main()
             else:
+                print("You answered 'no' restarting JukeboX...")
+                time.sleep(3.5)
+                os.system('clear')
                 main()
             break
 
-    return answer            #JUKEBOX.delete_row(row_num)
+    return answer            
             
 
 def validate_y_or_n(a):
@@ -287,7 +296,6 @@ def update_library(data):
     time.sleep(2)
     print("Library updated. Restarting JukeboX...\n")
     time.sleep(5)
-    # clear terminal here
     os.system('clear')
     main()
 
