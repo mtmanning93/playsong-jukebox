@@ -1,4 +1,5 @@
 import time
+import sys
 import os
 import validators
 import gspread
@@ -43,6 +44,8 @@ def main_menu():
     Main menu function enables user to select between
     Add, Remove, or Search song.
     """
+    print("")
+    print("Welcome to JukeboX!\n")
     while True:
         print("""Please begin by selecting from the menu below:
         \nA) Add Song\nB) Remove Song\nC) Search JukeboX\n""")
@@ -88,68 +91,6 @@ def main_menu_selection(opt):
     return menu_choice
 
 
-def remove_song():
-    """
-    Enables user to remove song from library
-    by displaying a menu to select from.
-    """
-    print(
-        "To remove a song from JukeboX please follow the steps below. \n"
-        )
-    delete_song = input("Enter song title to remove: ").lower()
-    print("")
-    
-    titles = JUKEBOX.col_values(2)
-
-    for rows in titles:
-        if delete_song in rows:
-            row_num = titles.index(delete_song) + 1
-            row_info = JUKEBOX.row_values(row_num)
-            print("Are you sure you would like to permanently delete:\n")
-            print("\n".join(row_info[:4]).title())
-            break
-
-    while True:
-    
-        answer = input("\nEnter Y / N: ").upper()
-        print("")
-
-        if validate_y_or_n(answer):
-            if answer == "Y":
-                print("Deleting...\n")
-                time.sleep(1)
-                JUKEBOX.delete_rows(row_num)
-                print('Song deleted from JukeboX. Restarting JukeboX...')
-                time.sleep(3.5)
-                os.system('clear')
-                main()
-            else:
-                print("You answered 'no' restarting JukeboX...")
-                time.sleep(3.5)
-                os.system('clear')
-                main()
-            break
-
-    return answer            
-            
-
-def validate_y_or_n(a):
-    """
-    Inside the try checks if input is y or n.
-    Raises error if anything is input.
-    """
-    try:
-        if a not in ("N", "Y"):
-            raise ValueError(
-                f"Answer 'y' for yes or 'n' for no. {a} is not valid.\n"
-            )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}\nPlease try again.")
-        return False
-
-    return True
-
-
 def add_song():
     """
     Enables user to add songs to the library via these inputs:
@@ -157,7 +98,7 @@ def add_song():
     2) song title
     3) genre
     4) year
-    5) url 
+    5) url
     """
     print(
         "To add a song to JukeboX please follow the steps below. \n"
@@ -216,6 +157,68 @@ def add_song():
     return new_song
 
 
+def remove_song():
+    """
+    Enables user to remove song from library
+    by displaying a menu to select from.
+    """
+    print(
+        "To remove a song from JukeboX please follow the steps below. \n"
+        )
+    delete_song = input("Enter song title to remove: ").lower()
+    print("")
+    
+    titles = JUKEBOX.col_values(2)
+
+    for rows in titles:
+        if delete_song in rows:
+            row_num = titles.index(delete_song) + 1
+            row_info = JUKEBOX.row_values(row_num)
+            print("Are you sure you would like to permanently delete:\n")
+            for row in rows:
+                print("\n".join(row_info[:4]).title())
+                break
+            break
+            
+    while True:
+    
+        answer = input("\nEnter Y / N: ").upper()
+        print("")
+
+        if validate_y_or_n(answer):
+            if answer == "Y":
+                print("Deleting...\n")
+                time.sleep(1)
+                JUKEBOX.delete_rows(row_num)
+                print('Song deleted from JukeboX. Restarting JukeboX...')
+                time.sleep(3)
+                reboot()
+            else:
+                print("You answered 'no' restarting JukeboX...")
+                time.sleep(2)
+                reboot()
+            break
+
+    return answer            
+            
+
+def validate_y_or_n(anwr):
+    """
+    Inside the try checks if input is y or n.
+    Raises error if anything is input.
+    """
+    try:
+        if anwr not in ("N", "Y"):
+            raise ValueError(
+                f"Answer 'y' for yes or 'n' for no. {anwr} is not valid.\n"
+            )
+    except ValueError as err:
+        print(f"\nInvalid input: {err}\nPlease try again.")
+        return False
+
+    return True
+
+
 def validate_song_entry(entry, year):
     """
     Validates if entry is already in library
@@ -243,7 +246,7 @@ def validate_length(wrd):
     Limit to 20 characters.
     """
     try:
-        if wrd > 20:
+        if wrd > 50:
             raise ValueError(
                 f"Maximum 20 characters allowed. {wrd} is too long.\n"
             )
@@ -295,9 +298,8 @@ def update_library(data):
     JUKEBOX.append_row(data)
     time.sleep(2)
     print("Library updated. Restarting JukeboX...\n")
-    time.sleep(5)
-    os.system('clear')
-    main()
+    time.sleep(2)
+    reboot()
 
 
 def select_search_type():
@@ -308,7 +310,9 @@ def select_search_type():
     while True:
         print("""Please begin by selecting a search method from the list below:
         \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
-        search_choice = input("""Please select a search type from A, B, C, D: """).upper()
+        search_choice = input(
+            """Please select a search type from A, B, C, D: """
+            ).upper()
 
         if validate_search_choice(search_choice):
             seperate_search_type(search_choice)
@@ -424,7 +428,7 @@ def validate_year(num):
     Raises error if entered number is not in time frame.
     """
     try:
-        if (num >= 1940 and num <= 2023):
+        if (num >= 1900 and num <= 2023):
             print("")
         else:
             raise ValueError(
@@ -474,11 +478,12 @@ def display_user_playlist(songs):
     """
     # Scrollable menu
     # list comprehension
+    songs.sort()
     songs.append(['Restart'])
     playlist_menu = TerminalMenu(
         [" ".join(song[:4]).title() for song in songs]
         )
-
+    
     restart = False
 
     while restart is False:
@@ -489,7 +494,8 @@ def display_user_playlist(songs):
         if chosen_song == songs[-1]:
             restart = True
             print('Restarting Jukebox...\n')
-            time.sleep(1)
+            time.sleep(1.5)
+            os.system('clear')
             main()
             break
         
@@ -498,6 +504,15 @@ def display_user_playlist(songs):
         url = f"{chosen_song.pop()}\n"
         print("Video link (cmd/ctrl + click to open):\n")
         print(url)
+ 
+
+def reboot():
+    """
+    Restarts program and clears terminal
+    """
+    os.system('clear')
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
 
 
 def main():
@@ -512,6 +527,4 @@ def main():
     populate_genre_list(GENRE_LIST, 1)
 
 
-print("")
-print("Welcome to JukeboX!\n")
 main()
