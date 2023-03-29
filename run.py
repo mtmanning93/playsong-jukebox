@@ -17,6 +17,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
 JUKEBOX = SHEET.worksheet('library')
+LIBRARY = SHEET.worksheet('library').get_all_values()[1:]
 
 # Initial genre menu
 # GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
@@ -80,8 +81,7 @@ def main_menu_selection(opt):
     if opt == "A":
         add_song()
     elif opt == "B":
-        print("remove song")
-        main()
+        remove_song()
     else:
         select_search_type()
 
@@ -90,13 +90,12 @@ def main_menu_selection(opt):
 
 def add_song():
     """
-    Enables user to add songs to the library
-    Inputs:
+    Enables user to add songs to the library via these inputs:
     1) artist name
     2) song title
     3) genre
     4) year
-    5) url
+    5) url 
     """
     print(
         "To add a song to JukeboX please follow the steps below. \n"
@@ -105,7 +104,7 @@ def add_song():
     new_song = []
     # Artist
     while True:
-        add_artist = input("Please enter artist name: \n")
+        add_artist = input("Please enter artist name: \n").lower()
         new_song.append(add_artist)
         print("")
         if validate_length(len(add_artist)):
@@ -118,7 +117,7 @@ def add_song():
         if validate_length(len(add_title)):
             break
     # Genre
-    add_genre = input("Please enter genre: \n")
+    add_genre = input("Please enter genre: \n").lower()
     new_song.append(add_genre.lower())
     print("")
 
@@ -149,24 +148,37 @@ def add_song():
         new_song.append(add_link)
         if link_validation(add_link):
             break
-
-    print("")
-    print("Adding:")
-    print(' - '.join(new_song[:2]).title())
-    print("")
-
-    new_song[3] = int(add_year)
-
-    update_library(new_song)
+    
+    validate_song_entry(new_song, add_year)
 
     return new_song
+
+
+def validate_song_entry(entry, year):
+    """
+    Validates if entry is already in library
+    If it is it is displayed as an option.
+    If it isn't it is added
+    """
+    if entry in JUKEBOX.get_all_values()[1:]:
+        print("")
+        print("Song already in JukeBox!\n")
+        search_library(entry[4])
+    else:
+        print("")
+        print("Adding:")
+        print(' - '.join(entry[:2]).title())
+        print("")
+
+        entry[3] = int(year)
+
+        update_library(entry)
 
 
 def validate_length(wrd):
     """
     Validates that an input string is not too long.
     Limit to 20 characters.
-
     """
     try:
         if wrd > 20:
@@ -180,16 +192,17 @@ def validate_length(wrd):
     return True
 
 
-def update_genre_list(data, inst):
+def populate_genre_list(data, inst):
     """
     Searches list of genres.
-    Creates new genre list of only one instance from each genre
+    Creates new genre list of only one instance from each genre.
     When user adds genre input its added to genre list if not already.
+    Gets passed the GENRE_LIST in the main() function.
     """
     for x in data:
         if data.count(x) > inst:
             while x in data:
-                data.remove(x) 
+                data.remove(x)
 
     print(data)
 
@@ -268,7 +281,7 @@ def seperate_search_type(option):
     search_name = SEARCH_MENU[option]
     print(f"You selected to search via {option}) {search_name}.\n")
 
-    if option == 'A' or option == 'B':
+    if option in ('A', 'B'):
         
         while True:
             user_search = input(f"Enter {search_name}: \n")
@@ -352,9 +365,6 @@ def validate_year(num):
     try:
         if (num >= 1940 and num <= 2023):
             print("")
-            # print(f"Searching library for {num}...\n")
-            # num_str = str(num)
-            # search_library(num_str)
         else:
             raise ValueError(
                 f"Numeric 4 digit year between 1940 and now required (example:"
@@ -373,13 +383,13 @@ def search_library(search_input):
     and searches through the library.
     Adds available songs to playlist list.
     """
-    library = SHEET.worksheet('library').get_all_values()[1:]
+    # library = SHEET.worksheet('library').get_all_values()[1:]
     
     is_song_available = False
 
     playlist = []
 
-    for tracks in library:
+    for tracks in LIBRARY:
         if search_input in tracks:
             is_song_available = True
             playlist.append(tracks)
@@ -397,12 +407,13 @@ def search_library(search_input):
 
 def display_user_playlist(songs):
     """
-    Displays all songs generated in the playlist for the user to select from
-    Also displays quit as a restart method to return to the original main menu if needed
+    Displays all songs generated in the
+    playlist for the user to select from. Also displays a restart method
+    to return to the original main menu if needed.
     """
     # Scrollable menu
     # list comprehension
-    songs.append(['Quit'])
+    songs.append(['Restart'])
     playlist_menu = TerminalMenu(
         [" ".join(song[:4]).title() for song in songs]
         )
@@ -421,9 +432,10 @@ def display_user_playlist(songs):
             main()
             break
         
+        # what happens when wanting to play a song
         print("\n".join(chosen_song[:4]).title() + "\n")
         url = f"{chosen_song.pop()}\n"
-        print("Video link (cmd/ctrl + click to open): \n")
+        print("Video link (cmd/ctrl + click to open):\n")
         print(url)
 
 
@@ -436,7 +448,7 @@ def main():
     add_song()
     search_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
     seperate_search_type(search_choice)
-    update_genre_list(GENRE_LIST, 1)
+    populate_genre_list(GENRE_LIST, 1)
 
 
 print("")
