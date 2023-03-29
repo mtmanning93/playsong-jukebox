@@ -169,56 +169,44 @@ def remove_song():
     print("")
     
     titles = JUKEBOX.col_values(2)
+    titles_length = len(titles)
+    delete_list = []
 
-    for rows in titles:
-        if delete_song in rows:
-            row_num = titles.index(delete_song) + 1
-            row_info = JUKEBOX.row_values(row_num)
-            print("Are you sure you would like to permanently delete:\n")
-            for row in rows:
-                print("\n".join(row_info[:4]).title())
-                break
-            break
-            
-    while True:
-    
-        answer = input("\nEnter Y / N: ").upper()
-        print("")
+    if delete_song in titles:
 
-        if validate_y_or_n(answer):
-            if answer == "Y":
-                print("Deleting...\n")
-                time.sleep(1)
-                JUKEBOX.delete_rows(row_num)
-                print('Song deleted from JukeboX. Restarting JukeboX...')
-                time.sleep(3)
-                reboot()
-            else:
-                print("You answered 'no' restarting JukeboX...")
-                time.sleep(2)
-                reboot()
-            break
+        for i in range(titles_length):
+            if (titles[i] == delete_song):
+                row_num = i + 1
+                row_info = JUKEBOX.row_values(row_num)
+                delete_list.append(row_info[:4])
+        
+        delete_list.sort()
+        delete_list.append(['Cancel'])
+        print("Choose from the list below to delete song:\n")
 
-    return answer            
-            
-
-def validate_y_or_n(anwr):
-    """
-    Inside the try checks if input is y or n.
-    Raises error if anything is input.
-    """
-    try:
-        if anwr not in ("N", "Y"):
-            raise ValueError(
-                f"Answer 'y' for yes or 'n' for no. {anwr} is not valid.\n"
+        options = TerminalMenu(
+            [" ".join(item[:4]).title() for item in delete_list]
             )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}\nPlease try again.")
-        return False
+                
+        delete_menu = options.show()
+        delete = delete_list[delete_menu]
+        deleted_song = " - ".join(delete[:2]).title()
 
-    return True
-
-
+        if delete == delete_list[-1]:
+            print('Deletion cancelled restarting Jukebox...\n')
+            time.sleep(2)
+            reboot()
+        else:
+            JUKEBOX.delete_rows(row_num)
+            print(f"{deleted_song}\nDeleted from JukeboX. Restarting JukeboX...\n")
+            time.sleep(3.5)
+            reboot()
+    # Fix This to validate
+    else:
+        print("Couldn't find song in JukeboX. Please try another...")
+        remove_song()
+            
+ 
 def validate_song_entry(entry, year):
     """
     Validates if entry is already in library
