@@ -130,8 +130,11 @@ def show_library(information):
             os.system('clear')
             main()
             break
-        
-        os.system('clear')
+
+        if (os.name == 'posix'):
+            os.system('clear')
+        else:
+            os.system('cls')
         print("\n".join(library_choice[:4]).title() + "\n")
         url = library_choice[-1]
         print("Video link (copy and paste url):\n")
