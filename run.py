@@ -17,7 +17,7 @@ SCOPE = [
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
+SHEET = GSPREAD_CLIENT.open('JukeboX')
 JUKEBOX = SHEET.worksheet('library')
 LIBRARY = SHEET.worksheet('library').get_all_values()[1:]
 TODAY = datetime.date.today()
@@ -162,54 +162,88 @@ def add_song():
 
 def remove_song():
     """
-    Enables user to remove song from library
-    by displaying a menu to select from.
+    Enables user to remove song from library by displaying a menu
+    to select from.
+    First validates that the song is in library and if not displays
+    another input attempt.
+    Ability to cancel remove song and return to main menu using 'c'
+    as an input. 
     """
     print(
         "To remove a song from JukeboX please follow the steps below. \n"
         )
-    delete_song = input("Enter song title to remove: ").lower()
-    print("")
-    
-    titles = JUKEBOX.col_values(2)
-    titles_length = len(titles)
-    delete_list = []
+    while True:
 
-    if delete_song in titles:
-
-        for i in range(titles_length):
-            if (titles[i] == delete_song):
-                row_num = i + 1
-                row_info = JUKEBOX.row_values(row_num)
-                delete_list.append(row_info[:4])
+        delete_song_input = input(
+            "Enter song title to remove ('c' to cancel): \n"
+            ).lower()
+        print("")
         
-        delete_list.sort()
-        delete_list.append(['Cancel'])
-        print("Choose from the list below to delete song:\n")
+        titles = JUKEBOX.col_values(2)
+        titles_length = len(titles)
+        delete_list = []
 
-        options = TerminalMenu(
-            [" ".join(item[:4]).title() for item in delete_list]
-            )
-                
-        delete_menu = options.show()
-        delete = delete_list[delete_menu]
-        deleted_song = " - ".join(delete[:2]).title()
-
-        if delete == delete_list[-1]:
+        if delete_song_input == 'c':
             print('Deletion cancelled restarting Jukebox...\n')
             time.sleep(2)
             reboot()
-        else:
-            JUKEBOX.delete_rows(row_num)
-            print(f"{deleted_song}\nDeleted from JukeboX. Restarting JukeboX...\n")
-            time.sleep(3.5)
-            reboot()
-    # Fix This to validate
-    else:
-        print("Couldn't find song in JukeboX. Please try another...")
-        remove_song()
+            break
+
+        if validate_removal(delete_song_input, titles):
             
- 
+            if delete_song_input in titles:
+
+                for i in range(titles_length):
+                    if (titles[i] == delete_song_input):
+                        row_num = i + 1
+                        row_info = JUKEBOX.row_values(row_num)
+                        delete_list.append(row_info[:4])
+                
+                delete_list.sort()
+                delete_list.append(['Cancel'])
+                print("Choose from the list below to delete song:\n")
+
+                options = TerminalMenu(
+                    [" ".join(item[:4]).title() for item in delete_list]
+                    )
+                        
+                delete_menu = options.show()
+                delete = delete_list[delete_menu]
+                deleted_song = " - ".join(delete[:2]).title()
+
+                if (delete == delete_list[-1]):
+                    print('Restarting Jukebox...\n')
+                    time.sleep(2)
+                    reboot()
+                else:
+                    JUKEBOX.delete_rows(row_num)
+                    print("Deleting...")
+                    print(f"\n{deleted_song} from JukeboX.\n")
+                    print('Song deleted. Restarting JukeboX...')
+                    time.sleep(3.5)
+                    reboot()
+            break
+
+    return delete_song_input, titles
+
+
+def validate_removal(val, lst):
+    """
+    Searches if song is in library and available to delete.
+    If song is not in library returns error and displays input again.
+    """
+    try:
+        if val not in lst:
+            raise ValueError(
+                f"{val} not found.\n"
+            )
+    except ValueError as err:
+        print(f"Couldn't find song in JukeboX:\n{err}\nPlease try again.\n")
+        return False
+
+    return True
+
+
 def validate_song_entry(entry, year):
     """
     Validates if entry is already in library
