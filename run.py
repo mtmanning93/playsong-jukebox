@@ -1,4 +1,5 @@
 import time
+import datetime
 import sys
 import os
 import validators
@@ -19,6 +20,8 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('playsong_jukebox')
 JUKEBOX = SHEET.worksheet('library')
 LIBRARY = SHEET.worksheet('library').get_all_values()[1:]
+TODAY = datetime.date.today()
+YEAR = TODAY.year
 
 # Initial genre menu
 # GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
@@ -411,16 +414,16 @@ def validate_genre(genre):
 def validate_year(num):
     """
     Inside the try checks if input is a valid date 
-    between 1940 and present year.
-    and between 1940 and current year.
+    between 1900 and present year.
+    and between 1900 and current year.
     Raises error if entered number is not in time frame.
     """
     try:
-        if (num >= 1900 and num <= 2023):
+        if (1900 <= num <= YEAR):
             print("")
         else:
             raise ValueError(
-                f"Numeric 4 digit year between 1940 and now required (example:"
+                f"Numeric 4 digit year between 1900 and now required (example:"
                 f" 1989). {num} is not valid.\n"
             )
     except ValueError as err:
