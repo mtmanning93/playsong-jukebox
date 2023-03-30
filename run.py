@@ -24,14 +24,13 @@ LIBRARY = SHEET.worksheet('library').get_all_values()[1:]
 TODAY = datetime.date.today()
 YEAR = TODAY.year
 
-# Initial genre menu
-# GENRE_LIST = ['rock', 'hip hop', 'electronic', 'reggae', 'indie', 'blues']
 GENRE_LIST = JUKEBOX.col_values(3)[1:]
 
 MAIN_MENU = {
     'A': "add song",
     'B': "remove song",
-    'C': "search song"
+    'C': "search song",
+    'D': "show library"
 }
 
 # Initial user menu
@@ -51,10 +50,12 @@ def main_menu():
     print("")
     print("Welcome to JukeboX!\n")
     while True:
-        print("""Please begin by selecting from the menu below:
-        \nA) Add Song\nB) Remove Song\nC) Search JukeboX\n""")
+        print(
+            """Please begin by selecting from the menu below:
+        \nA) Add Song\nB) Remove Song\nC) Search JukeboX\nD) Display All\n"""
+        )
         main_menu_choice = input(
-            """Please select a menu choice type from A, B, C:\n"""
+            """Please select a menu choice type from A, B, C, D:\n"""
             ).upper()
 
         if validate_main_choice(main_menu_choice):
@@ -71,7 +72,7 @@ def validate_main_choice(value):
     try:
         if value not in MAIN_MENU.keys():
             raise ValueError(
-                f"Search type A, B, C required. {value} is not valid.\n"
+                f"Search type A, B, C, D required. {value} is not valid.\n"
             )
     except ValueError as err:
         print(f"\nInvalid input: {err}\n Please try again.\n")
@@ -91,10 +92,31 @@ def main_menu_selection(opt):
         add_song()
     elif opt == "B":
         remove_song()
+    elif opt == "D":
+        show_library(JUKEBOX)
     else:
         select_search_type()
 
     return menu_choice
+
+
+# def show_library(thing):
+#     """
+#     Shows scrollable version of entire library
+#     """
+#     print(thing.)
+#     # songs.sort()
+#     # songs.append(['Restart'])
+#     # full_library = TerminalMenu(
+#     #     [" ".join(song[:4]).title() for song in songs]
+#     #     )
+    
+#     # restart = False
+
+#     # while restart is False:
+
+#     #     menu = playlist_menu.show()
+#     #     chosen_song = songs[menu]
 
 
 def add_song():
@@ -368,8 +390,6 @@ def seperate_search_type(option):
         time.sleep(1)
         search_library(user_search)
 
-        return user_search
-
     elif option == 'C':
         # Provide list of genres for user
         print("Please select from the list of genres below.\n")
@@ -391,8 +411,6 @@ def seperate_search_type(option):
 
         search_library(genre_input)
 
-        return genre_input
-
     else:
         # Search validation for year
         while True:
@@ -411,7 +429,7 @@ def seperate_search_type(option):
                 print("""\nNot a number! Please input a number. 
                 (example 1989)\n""")     
 
-        return year
+    return user_search, genre_input, year
 
 
 def validate_genre(genre):
@@ -462,16 +480,16 @@ def search_library(search_input):
     and searches through the library.
     Adds available songs to playlist list.
     """
-    # library = SHEET.worksheet('library').get_all_values()[1:]
     
     is_song_available = False
 
     playlist = []
 
     for tracks in LIBRARY:
-        if search_input in tracks:
-            is_song_available = True
-            playlist.append(tracks)
+        for data in tracks:
+            if search_input in data:
+                is_song_available = True
+                playlist.append(tracks)
     display_user_playlist(playlist)
 
     if not is_song_available:
@@ -490,8 +508,6 @@ def display_user_playlist(songs):
     playlist for the user to select from. Also displays a restart method
     to return to the original main menu if needed.
     """
-    # Scrollable menu
-    # list comprehension
     songs.sort()
     songs.append(['Restart'])
     playlist_menu = TerminalMenu(
@@ -514,11 +530,11 @@ def display_user_playlist(songs):
             break
         
         # what happens when wanting to play a song
-        print("\n".join(chosen_song[:4]).title() + "\n")
+        #print("\n".join(chosen_song[:4]).title() + "\n")
         url = f"{chosen_song.pop()}\n"
-        print("Video link (copy and paste url):\n")
-        print(url)
-        # webbrowser.open_new_tab(url)
+        #print("Video link (copy and paste url):\n")
+        #print(url)
+        webbrowser.open_new_tab(url)
  
 
 def reboot():
