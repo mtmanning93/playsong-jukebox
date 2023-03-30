@@ -116,28 +116,32 @@ def show_library(information):
         [" - ".join(song[:2]).title() for song in all_songs]
         )
 
-    restart = False
+    menu = show_all_menu.show()
+    library_choice = all_songs[menu]
 
-    while restart is False:
-
-        menu = show_all_menu.show()
-        library_choice = all_songs[menu]
-
-        if library_choice == all_songs[-1]:
-            restart = True
-            print('Restart Jukebox...\n')
-            time.sleep(1.5)
-            os.system('clear')
-            main()
-            break
-
+    if library_choice == all_songs[-1]:
+        print('Restart Jukebox...\n')
+        time.sleep(1.5)
+        os.system('clear')
+        main()
+    else:
         os.system('clear')
         print("You selected:\n")
         print("\n".join(library_choice[:4]).title() + "\n")
         url = library_choice[-1]
         print("Video link (copy and paste url):\n")
         print(f"{url}\n")
-        # webbrowser.open_new_tab(url)
+
+        return_buttons = ['Back to list', 'Home']
+
+        back_menu = TerminalMenu(return_buttons)
+        button = back_menu.show()
+        back_choice = return_buttons[button]
+
+        if back_choice == 'Home':
+            reboot()
+        else:
+            show_library(LIBRARY)
 
     return all_songs
 
