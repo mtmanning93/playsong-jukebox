@@ -2,6 +2,7 @@ import time
 import datetime
 import sys
 import os
+import webbrowser
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
@@ -282,21 +283,21 @@ def validate_length(wrd):
     return True
 
 
-def populate_genre_list(data, inst):
-    """
-    Searches list of genres.
-    Creates new genre list of only one instance from each genre.
-    When user adds genre input its added to genre list if not already.
-    Gets passed the GENRE_LIST in the main() function.
-    """
-    for x in data:
-        if data.count(x) > inst:
-            while x in data:
-                data.remove(x)
+# def populate_genre_list(data, inst):
+#     """
+#     Searches list of genres.
+#     Creates new genre list of only one instance from each genre.
+#     When user adds genre input its added to genre list if not already.
+#     Gets passed the GENRE_LIST in the main() function.
+#     """
+#     for item in data:
+#         if data.count(item) >= inst:
+#             while item in data:
+#                 data.remove(item)
 
-    print(data)
+#     print(data)
 
-    return data
+#     return data
 
 
 def link_validation(link):
@@ -388,8 +389,12 @@ def seperate_search_type(option):
     elif option == 'C':
         # Provide list of genres for user
         print("Please select from the list of genres below.\n")
-        for genre in GENRE_LIST:
-            print(genre.title())
+        simple_genre_list = []
+        for j in GENRE_LIST:
+            if j not in simple_genre_list:
+                simple_genre_list.append(j)
+        for item in simple_genre_list:
+            print(item.title())
         print("")
         
         while True:
@@ -525,10 +530,11 @@ def display_user_playlist(songs):
             break
         
         # what happens when wanting to play a song
-        print("\n".join(chosen_song[:4]).title() + "\n")
+        # print("\n".join(chosen_song[:4]).title() + "\n")
         url = f"{chosen_song.pop()}\n"
-        print("Video link (cmd/ctrl + click to open):\n")
-        print(url)
+        # print("Video link (cmd/ctrl + click to open):\n")
+        # print(url)
+        webbrowser.open_new_tab(url)
  
 
 def reboot():
@@ -547,9 +553,9 @@ def main():
     main_choice = main_menu()
     main_menu_selection(main_choice)
     add_song()
-    search_choice = select_search_type()  # THIS IS THE SELECTED METHOD (A/B/C/D)
+    search_choice = select_search_type()
     seperate_search_type(search_choice)
-    populate_genre_list(GENRE_LIST, 1)
+    # populate_genre_list(GENRE_LIST, 2)
 
 
 main()
