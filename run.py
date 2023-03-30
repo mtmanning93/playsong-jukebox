@@ -130,8 +130,7 @@ def show_library(information):
             os.system('clear')
             main()
             break
-    
-        # what happens when wanting to play a song
+        
         os.system('clear')
         print("\n".join(library_choice[:4]).title() + "\n")
         url = library_choice[-1]
