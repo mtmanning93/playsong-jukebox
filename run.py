@@ -114,16 +114,16 @@ def add_song():
     # Artist
     while True:
         add_artist = input("Please enter artist name:\n").lower()
-        new_song.append(add_artist)
         print("")
         if validate_length(len(add_artist)):
+            new_song.append(add_artist)
             break
     # Title
     while True:
         add_title = input("Please enter song title:\n")
-        new_song.append(add_title)
         print("")
         if validate_length(len(add_title)):
+            new_song.append(add_title)
             break
     # Genre
     add_genre = input("Please enter genre:\n").lower()
@@ -136,8 +136,8 @@ def add_song():
     while True:
         try:
             add_year = input("Please enter year of release:\n")
-            new_song.append(add_year)
             if validate_year(int(add_year)):
+                new_song.append(add_year)
                 break
         except ValueError:
             print("""\nNot a number! Please input a number. 
@@ -149,15 +149,15 @@ def add_song():
         )
     print("Use the search link to find a video of your choice.")
     print("Then copy and paste the link below.\n")
-    time.sleep(3.5)
-    print(f"Opening search...\n{search}\n")
-    
+    time.sleep(1)
+    print(f"Link to search for video (copy/paste):\n{search}\n")
     time.sleep(2)
-    webbrowser.open_new_tab(search)
+    # webbrowser.open_new_tab(search)
     while True:
         add_link = input("Paste url here:\n")
-        new_song.append(add_link)
+        # new_song.append(add_link)
         if link_validation(add_link):
+            new_song.append(add_link)
             break
     
     validate_song_entry(new_song, add_year)
@@ -277,9 +277,9 @@ def validate_length(wrd):
     Limit to 20 characters.
     """
     try:
-        if wrd > 50:
+        if wrd > 40:
             raise ValueError(
-                f"Maximum 20 characters allowed. {wrd} is too long.\n"
+                f"Maximum 40 characters allowed. {wrd} is too long.\n"
             )
     except ValueError as err:
         print(f"\nInvalid input: {err}Please shorten your input.\n")
@@ -308,7 +308,7 @@ def update_library(data):
     """
     Updates google sheet by adding new song
     """
-    print("Updating library...\n")
+    print("Updating library...")
     JUKEBOX.append_row(data)
     time.sleep(2)
     print("Library updated. Restarting JukeboX...\n")
@@ -520,7 +520,7 @@ def display_user_playlist(songs):
         # what happens when wanting to play a song
         print("\n".join(chosen_song[:4]).title() + "\n")
         url = f"{chosen_song.pop()}\n"
-        print("Video link (cmd/ctrl + click to open):\n")
+        print("Video link (copy and paste url):\n")
         print(url)
         # webbrowser.open_new_tab(url)
  
