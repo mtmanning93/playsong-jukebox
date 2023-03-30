@@ -53,7 +53,9 @@ def main_menu():
     while True:
         print("""Please begin by selecting from the menu below:
         \nA) Add Song\nB) Remove Song\nC) Search JukeboX\n""")
-        main_menu_choice = input("""Please select a menu choice type from A, B, C: """).upper()
+        main_menu_choice = input(
+            """Please select a menu choice type from A, B, C:\n"""
+            ).upper()
 
         if validate_main_choice(main_menu_choice):
             break
@@ -111,20 +113,20 @@ def add_song():
     new_song = []
     # Artist
     while True:
-        add_artist = input("Please enter artist name: \n").lower()
+        add_artist = input("Please enter artist name:\n").lower()
         new_song.append(add_artist)
         print("")
         if validate_length(len(add_artist)):
             break
     # Title
     while True:
-        add_title = input("Please enter song title: \n")
+        add_title = input("Please enter song title:\n")
         new_song.append(add_title)
         print("")
         if validate_length(len(add_title)):
             break
     # Genre
-    add_genre = input("Please enter genre: \n").lower()
+    add_genre = input("Please enter genre:\n").lower()
     new_song.append(add_genre.lower())
     print("")
 
@@ -133,7 +135,7 @@ def add_song():
     # Year
     while True:
         try:
-            add_year = input("Please enter year of release: \n")
+            add_year = input("Please enter year of release:\n")
             new_song.append(add_year)
             if validate_year(int(add_year)):
                 break
@@ -141,17 +143,19 @@ def add_song():
             print("""\nNot a number! Please input a number. 
             (example 1989)\n""")
     # Link
-    print(
-        """Use the link below to find a video of your choice.
-        (cmd/ctrl + click to open)"""
-        )
-    print(
+    search = (
         f'https://www.youtube.com/results?search_query='
-        f'{add_artist.replace(" ", "")}'
-        f'+{add_title.replace(" ", "")}\n'
+        f'{add_artist.replace(" ", "")}+{add_title.replace(" ", "")}'
         )
+    print("Use the search link to find a video of your choice.")
+    print("Then copy and paste the link below.\n")
+    time.sleep(3.5)
+    print(f"Opening search...\n{search}\n")
+    
+    time.sleep(2)
+    webbrowser.open_new_tab(search)
     while True:
-        add_link = input("Paste url here: ")
+        add_link = input("Paste url here:\n")
         new_song.append(add_link)
         if link_validation(add_link):
             break
@@ -176,7 +180,7 @@ def remove_song():
     while True:
 
         delete_song_input = input(
-            "Enter song title to remove ('c' to cancel): \n"
+            "Enter song title to remove ('c' to cancel):\n"
             ).lower()
         print("")
         
@@ -219,7 +223,8 @@ def remove_song():
                 else:
                     JUKEBOX.delete_rows(row_num)
                     print("Deleting...")
-                    print(f"\n{deleted_song} from JukeboX.\n")
+                    print(f"\n{deleted_song} from JukeboX...\n")
+                    time.sleep(1)
                     print('Song deleted. Restarting JukeboX...')
                     time.sleep(3.5)
                     reboot()
@@ -283,23 +288,6 @@ def validate_length(wrd):
     return True
 
 
-# def populate_genre_list(data, inst):
-#     """
-#     Searches list of genres.
-#     Creates new genre list of only one instance from each genre.
-#     When user adds genre input its added to genre list if not already.
-#     Gets passed the GENRE_LIST in the main() function.
-#     """
-#     for item in data:
-#         if data.count(item) >= inst:
-#             while item in data:
-#                 data.remove(item)
-
-#     print(data)
-
-#     return data
-
-
 def link_validation(link):
     """
     Validates whether the input pasted into the url input is a link
@@ -337,7 +325,7 @@ def select_search_type():
         print("""Please begin by selecting a search method from the list below:
         \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
         search_choice = input(
-            """Please select a search type from A, B, C, D: """
+            """Please select a search type from A, B, C, D:\n"""
             ).upper()
 
         if validate_search_choice(search_choice):
@@ -375,7 +363,7 @@ def seperate_search_type(option):
     if option in ('A', 'B'):
         
         while True:
-            user_search = input(f"Enter {search_name}: \n")
+            user_search = input(f"Enter {search_name}:\n")
             print("")
             if validate_length(len(user_search)):
                 break
@@ -398,7 +386,7 @@ def seperate_search_type(option):
         print("")
         
         while True:
-            genre_input = input("Enter Genre: \n")
+            genre_input = input("Enter Genre:\n")
             print("")
 
             if validate_genre(genre_input):
@@ -415,7 +403,7 @@ def seperate_search_type(option):
             # The try checks if value given is a number. 
             # If not a Value Error is given.
             try:
-                year = int(input("Enter year between 1940 and now: \n"))
+                year = int(input("Enter year between 1900 and now:\n"))
                 print("")
                 if validate_year(year):
                     #
@@ -555,7 +543,5 @@ def main():
     add_song()
     search_choice = select_search_type()
     seperate_search_type(search_choice)
-    # populate_genre_list(GENRE_LIST, 2)
-
 
 main()
