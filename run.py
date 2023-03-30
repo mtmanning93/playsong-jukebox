@@ -113,7 +113,7 @@ def show_library(information):
     all_songs.append(['Restart'])
 
     show_all_menu = TerminalMenu(
-        [" ".join(song[:2]).title() for song in all_songs]
+        [" - ".join(song[:2]).title() for song in all_songs]
         )
 
     restart = False
@@ -125,16 +125,14 @@ def show_library(information):
 
         if library_choice == all_songs[-1]:
             restart = True
-            print('Restarting Jukebox...\n')
+            print('Restart Jukebox...\n')
             time.sleep(1.5)
             os.system('clear')
             main()
             break
 
-        if (os.name == 'posix'):
-            os.system('clear')
-        else:
-            os.system('cls')
+        os.system('clear')
+        print("You selected:\n")
         print("\n".join(library_choice[:4]).title() + "\n")
         url = library_choice[-1]
         print("Video link (copy and paste url):\n")
@@ -232,7 +230,7 @@ def remove_song():
         print("")
         
         if delete_song_input == 'c':
-            print('Cancelled restarting Jukebox...\n')
+            print('Cancelled Please restart Jukebox...\n')
             time.sleep(2)
             reboot()
             
