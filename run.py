@@ -518,11 +518,11 @@ def display_user_playlist(songs):
             break
         
         # what happens when wanting to play a song
-        # print("\n".join(chosen_song[:4]).title() + "\n")
+        print("\n".join(chosen_song[:4]).title() + "\n")
         url = f"{chosen_song.pop()}\n"
-        # print("Video link (cmd/ctrl + click to open):\n")
-        # print(url)
-        webbrowser.open_new_tab(url)
+        print("Video link (cmd/ctrl + click to open):\n")
+        print(url)
+        # webbrowser.open_new_tab(url)
  
 
 def reboot():
