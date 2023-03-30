@@ -2,7 +2,7 @@ import time
 import datetime
 import sys
 import os
-import webbrowser
+# import webbrowser
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
@@ -93,30 +93,53 @@ def main_menu_selection(opt):
     elif opt == "B":
         remove_song()
     elif opt == "D":
-        show_library(JUKEBOX)
+        show_library(LIBRARY)
     else:
         select_search_type()
 
     return menu_choice
 
 
-# def show_library(thing):
-#     """
-#     Shows scrollable version of entire library
-#     """
-#     print(thing.)
-#     # songs.sort()
-#     # songs.append(['Restart'])
-#     # full_library = TerminalMenu(
-#     #     [" ".join(song[:4]).title() for song in songs]
-#     #     )
+def show_library(information):
+    """
+    Shows scrollable version of entire library and displays link
+    when selected. Shows restart as an option also.
+    """
+    all_songs = []
+    for info in information:
+        all_songs.append(info)
     
-#     # restart = False
+    all_songs.sort()
+    all_songs.append(['Restart'])
 
-#     # while restart is False:
+    show_all_menu = TerminalMenu(
+        [" ".join(song[:2]).title() for song in all_songs]
+        )
 
-#     #     menu = playlist_menu.show()
-#     #     chosen_song = songs[menu]
+    restart = False
+
+    while restart is False:
+
+        menu = show_all_menu.show()
+        library_choice = all_songs[menu]
+
+        if library_choice == all_songs[-1]:
+            restart = True
+            print('Restarting Jukebox...\n')
+            time.sleep(1.5)
+            os.system('clear')
+            main()
+            break
+    
+        # what happens when wanting to play a song
+        os.system('clear')
+        print("\n".join(library_choice[:4]).title() + "\n")
+        url = library_choice[-1]
+        print("Video link (copy and paste url):\n")
+        print(f"{url}\n")
+        # webbrowser.open_new_tab(url)
+
+    return all_songs
 
 
 def add_song():
@@ -530,11 +553,11 @@ def display_user_playlist(songs):
             break
         
         # what happens when wanting to play a song
-        #print("\n".join(chosen_song[:4]).title() + "\n")
-        url = f"{chosen_song.pop()}\n"
-        #print("Video link (copy and paste url):\n")
-        #print(url)
-        webbrowser.open_new_tab(url)
+        print("\n".join(chosen_song[:4]).title() + "\n")
+        url = chosen_song[-1]
+        print("Video link (copy and paste url):\n")
+        print(f"{url}\n")
+        # webbrowser.open_new_tab(url)
  
 
 def reboot():
@@ -555,5 +578,6 @@ def main():
     add_song()
     search_choice = select_search_type()
     seperate_search_type(search_choice)
+
 
 main()
