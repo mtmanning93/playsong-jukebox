@@ -122,8 +122,7 @@ def show_library(information):
     if library_choice == all_songs[-1]:
         print('Restart Jukebox...\n')
         time.sleep(1.5)
-        os.system('clear')
-        main()
+        reboot()
     else:
         os.system('clear')
         print("You selected:\n")
@@ -132,7 +131,7 @@ def show_library(information):
         print("Video link (copy and paste url):\n")
         print(f"{url}\n")
 
-        return_buttons = ['Back to list', 'Home']
+        return_buttons = [library_choice[4], 'Back to list', 'Home']
 
         back_menu = TerminalMenu(return_buttons)
         button = back_menu.show()
@@ -556,8 +555,7 @@ def display_user_playlist(songs):
             restart = True
             print('Restarting Jukebox...\n')
             time.sleep(1.5)
-            os.system('clear')
-            main()
+            reboot()
             break
 
         # what happens when wanting to play a song
