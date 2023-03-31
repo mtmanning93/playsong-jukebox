@@ -60,7 +60,7 @@ def main_menu():
 
         if validate_main_choice(main_menu_choice):
             break
-    
+
     return main_menu_choice
 
 
@@ -108,7 +108,7 @@ def show_library(information):
     all_songs = []
     for info in information:
         all_songs.append(info)
-    
+
     all_songs.sort()
     all_songs.append(['Restart'])
 
@@ -180,7 +180,7 @@ def add_song():
     print("")
 
     if add_genre not in GENRE_LIST:
-        GENRE_LIST.append(add_genre.lower())   
+        GENRE_LIST.append(add_genre.lower())
     # Year
     while True:
         try:
@@ -189,8 +189,10 @@ def add_song():
                 new_song.append(add_year)
                 break
         except ValueError:
-            print("""\nNot a number! Please input a number. 
-            (example 1989)\n""")
+            print(
+                """\nNot a number! Please input a number.
+            (example 1989)\n"""
+            )
     # Link
     search = (
         f'https://www.youtube.com/results?search_query='
@@ -208,7 +210,7 @@ def add_song():
         if link_validation(add_link):
             new_song.append(add_link)
             break
-    
+
     validate_song_entry(new_song, add_year)
 
     return new_song
@@ -221,7 +223,7 @@ def remove_song():
     First validates that the song is in library and if not displays
     another input attempt.
     Ability to cancel remove song and return to main menu using 'c'
-    as an input. 
+    as an input.
     """
     print(
         "To remove a song from JukeboX please follow the steps below. \n"
@@ -232,14 +234,14 @@ def remove_song():
             "Enter song title to remove ('c' to cancel):\n"
             ).lower()
         print("")
-        
+
         if delete_song_input == 'c':
             print('Cancelled Please restart Jukebox...\n')
             time.sleep(2)
             reboot()
-            
+
         find_list = JUKEBOX.findall(delete_song_input)
-        
+
         delete_list = []
 
         for item in find_list:
@@ -376,7 +378,7 @@ def select_search_type():
         if validate_search_choice(search_choice):
             seperate_search_type(search_choice)
             break
-    
+
     return search_choice
 
 
@@ -406,7 +408,7 @@ def seperate_search_type(option):
     print(f"You selected to search via {option}) {search_name}.\n")
 
     if option in ('A', 'B'):
-        
+
         while True:
             user_search = input(f"Enter {search_name}:\n")
             print("")
@@ -427,7 +429,7 @@ def seperate_search_type(option):
         for item in simple_genre_list:
             print(item.title())
         print("")
-        
+
         while True:
             genre_input = input("Enter Genre:\n")
             print("")
@@ -441,7 +443,7 @@ def seperate_search_type(option):
     else:
         # Search validation for year
         while True:
-            # The try checks if value given is a number. 
+            # The try checks if value given is a number.
             # If not a Value Error is given.
             try:
                 year = int(input("Enter year between 1900 and now:\n"))
@@ -453,8 +455,10 @@ def seperate_search_type(option):
                     #
                     break
             except ValueError:
-                print("""\nNot a number! Please input a number. 
-                (example 1989)\n""")     
+                print(
+                    """\nNot a number! Please input a number.
+                    (example 1989)\n"""
+                )
 
     return user_search, genre_input, year
 
@@ -467,7 +471,7 @@ def validate_genre(genre):
         if genre not in GENRE_LIST:
             raise ValueError(
                 f"{genre.title()} is not in provided options.\n"
-                
+
             )
     except ValueError as error:
         print(
@@ -477,11 +481,11 @@ def validate_genre(genre):
         return False
 
     return True
-            
+
 
 def validate_year(num):
     """
-    Inside the try checks if input is a valid date 
+    Inside the try checks if input is a valid date
     between 1900 and present year.
     and between 1900 and current year.
     Raises error if entered number is not in time frame.
@@ -507,7 +511,7 @@ def search_library(search_input):
     and searches through the library.
     Adds available songs to playlist list.
     """
-    
+
     is_song_available = False
 
     playlist = []
@@ -527,7 +531,7 @@ def search_library(search_input):
         select_search_type()
 
     return is_song_available
- 
+
 
 def display_user_playlist(songs):
     """
@@ -540,7 +544,7 @@ def display_user_playlist(songs):
     playlist_menu = TerminalMenu(
         [" ".join(song[:4]).title() for song in songs]
         )
-    
+
     restart = False
 
     while restart is False:
@@ -555,14 +559,14 @@ def display_user_playlist(songs):
             os.system('clear')
             main()
             break
-        
+
         # what happens when wanting to play a song
         print("\n".join(chosen_song[:4]).title() + "\n")
         url = chosen_song[-1]
         print("Video link (copy and paste url):\n")
         print(f"{url}\n")
         # webbrowser.open_new_tab(url)
- 
+
 
 def reboot():
     """
