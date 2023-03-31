@@ -139,6 +139,8 @@ def show_library(information):
 
         if back_choice == 'Home':
             reboot()
+        elif back_choice == return_buttons[1]:
+            webbrowser.open_new_tab(return_buttons[1])
         else:
             show_library(LIBRARY)
 
