@@ -2,7 +2,7 @@ import time
 import datetime
 import sys
 import os
-import webbrowser
+# import webbrowser
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
@@ -131,7 +131,7 @@ def show_library(information):
         print("Video link (copy and paste url):\n")
         print(f"{url}\n")
 
-        return_buttons = [library_choice[4], 'Back to list', 'Home']
+        return_buttons = ['Back to list', 'Home']
 
         back_menu = TerminalMenu(return_buttons)
         button = back_menu.show()
@@ -139,8 +139,6 @@ def show_library(information):
 
         if back_choice == 'Home':
             reboot()
-        elif back_choice == return_buttons[1]:
-            webbrowser.open_new_tab(return_buttons[1])
         else:
             show_library(LIBRARY)
 
