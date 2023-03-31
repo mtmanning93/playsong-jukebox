@@ -2,7 +2,7 @@ import time
 import datetime
 import sys
 import os
-# import webbrowser
+import webbrowser
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
