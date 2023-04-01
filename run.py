@@ -6,7 +6,6 @@ import os
 import validators
 import gspread
 from google.oauth2.service_account import Credentials
-
 from simple_term_menu import TerminalMenu
 
 SCOPE = [
@@ -47,8 +46,9 @@ def main_menu():
     Main menu function enables user to select between
     Add, Remove, or Search song.
     """
-    print("")
-    print("Welcome to YT JukeboX!\n")
+    print("------------------------------------------------------------\n")
+    print("Welsome to YT JukeboX!\n")
+    print("------------------------------------------------------------")
     while True:
         print(
             """Please begin by selecting from the menu below:
@@ -86,6 +86,7 @@ def main_menu_selection(opt):
     Takes users main menu selection and moves to the correct funnction.
     """
     menu_choice = MAIN_MENU[opt]
+    print("------------------------------------------------------------\n")
     print(f"You selected to {menu_choice}.\n")
 
     if opt == "A":
@@ -93,6 +94,7 @@ def main_menu_selection(opt):
     elif opt == "B":
         remove_song()
     elif opt == "D":
+        os.system('clear')
         show_library(LIBRARY)
     else:
         select_search_type()
@@ -140,6 +142,7 @@ def show_library(information):
         if back_choice == 'Home':
             reboot()
         else:
+            os.system('clear')
             show_library(LIBRARY)
 
     return all_songs
@@ -307,8 +310,7 @@ def validate_song_entry(entry, year):
         print("Song already in JukeBox!\n")
         search_library(entry[4])
     else:
-        print("")
-        print("Adding:")
+        print("Adding:\n")
         print(' - '.join(entry[:2]).title())
         print("")
 
@@ -368,7 +370,7 @@ def select_search_type():
     Provides search options for the user to select from.
     """
     while True:
-        print("""Please begin by selecting a search method from the list below:
+        print("""Please select a search method from the list below:
         \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
         search_choice = input(
             """Please select a search type from A, B, C, D:\n"""
@@ -404,6 +406,7 @@ def seperate_search_type(option):
     Depending on search type!
     """
     search_name = SEARCH_MENU[option]
+    print("------------------------------------------------------------\n")
     print(f"You selected to search via {option}) {search_name}.\n")
 
     if option in ('A', 'B'):
