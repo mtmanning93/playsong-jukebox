@@ -233,18 +233,18 @@ def remove_song():
     while True:
 
         delete_song_input = input(
-            "Enter song title to remove ('c' to cancel):\n"
+            "Enter some song information to remove ((c) cancel):\n"
             ).lower()
         print("")
-
-        if delete_song_input == 'c':
-            print('Cancelled Please restart Jukebox...\n')
-            time.sleep(2)
-            reboot()
 
         find_list = JUKEBOX.findall(delete_song_input)
 
         delete_list = []
+
+        if delete_song_input == 'c':
+            print('Cancelled restarting Jukebox...\n')
+            time.sleep(2)
+            reboot()
 
         for item in find_list:
             row_num = item.row
@@ -257,8 +257,9 @@ def remove_song():
         options = TerminalMenu(
             [" ".join(i[:4]).title() for i in delete_list]
             )
-
-        print("Choose from the list below to delete song:\n")
+            
+        print("------------------------------------------------------------\n")
+        print("Choose from the list below and press Enter to delete song:\n")
 
         delete_menu = options.show()
         delete = delete_list[delete_menu]
