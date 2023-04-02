@@ -113,3 +113,12 @@ The app was deployed with Code Institutes mock terminal on the [Heroku](https://
     - Click deploy
 
 ## Credits
+
+CI Love Sandwiches
+
+    - Wiring Google Sheets API
+    - Input validations and while loops
+    
+
+EG?
+

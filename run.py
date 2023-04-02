@@ -228,7 +228,7 @@ def remove_song():
     """
     print(
         "To remove a song from JukeboX please follow the steps below. \n"
-        )
+    )
     while True:
 
         delete_song_input = input(
@@ -236,50 +236,23 @@ def remove_song():
             ).lower()
         print("")
 
-        find_list = JUKEBOX.findall(delete_song_input)
-
-        delete_list = []
-
         if delete_song_input == 'c':
             print('Cancelled restarting Jukebox...\n')
             time.sleep(2)
             reboot()
 
-        for item in find_list:
-            row_num = item.row
-            row_info = JUKEBOX.row_values(row_num)
-            delete_list.append(row_info[:4])
+        library_values = []
 
-        delete_list.sort()
-        delete_list.append(['Cancel'])
+        for song in LIBRARY:
+            if delete_song_input in song:
+                library_values += song
+    
+        if validate_removal(delete_song_input, library_values):
+            break
 
-        options = TerminalMenu(
-            [" ".join(i[:4]).title() for i in delete_list]
-            )
-            
-        print("------------------------------------------------------------\n")
-        print("Choose from the list below and press Enter to delete song:\n")
+    show_delete_menu(delete_song_input)
 
-        delete_menu = options.show()
-        delete = delete_list[delete_menu]
-
-        deleted_song = " - ".join(delete[:2]).title()
-
-        if (delete == delete_list[-1]):
-            print('Restarting Jukebox...\n')
-            time.sleep(2)
-            reboot()
-        else:
-            JUKEBOX.delete_rows(row_num)
-            print("Deleting...")
-            print(f"\n{deleted_song} from JukeboX...\n")
-            time.sleep(1)
-            print('Song deleted. Restarting JukeboX...')
-            time.sleep(3.5)
-            reboot()
-        break
-
-    return delete_song_input, find_list
+    return delete_song_input
 
 
 def validate_removal(val, lst):
@@ -297,6 +270,49 @@ def validate_removal(val, lst):
         return False
 
     return True
+
+
+def show_delete_menu(val):
+    """
+    If song is found in library this function will display a menu
+    from which the user can choose which song to delete 
+    """
+    search_list = JUKEBOX.findall(val)
+    delete_list = []
+
+    for item in search_list:
+        row_num = item.row
+        row_info = JUKEBOX.row_values(row_num)
+        delete_list.append(row_info[:2])
+    
+    delete_list.sort()
+    delete_list.append(['Cancel'])
+
+    options = TerminalMenu(
+            [" ".join(i[:4]).title() for i in delete_list]
+            )
+        
+    print("------------------------------------------------------------\n")
+    print("Choose from the list below and press Enter to delete song:\n")
+
+    delete_menu = options.show()
+    delete = delete_list[delete_menu]
+    deleted_song = " - ".join(delete[:2]).title()
+
+    if (delete == delete_list[-1]):
+        print('Restarting Jukebox...\n')
+        time.sleep(2)
+        reboot()
+    else:
+        JUKEBOX.delete_rows(row_num)
+        print("Deleting...")
+        print(f"\n{deleted_song} from JukeboX...\n")
+        time.sleep(1)
+        print('Song deleted. Restarting JukeboX...')
+        time.sleep(3.5)
+        reboot()
+
+    return delete_menu
 
 
 def validate_song_entry(entry, year):
