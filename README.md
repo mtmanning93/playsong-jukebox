@@ -15,13 +15,13 @@ Users can store their favourite music videos all in one place and play them via 
 
 ### Add Song
 
-The add song function enables the user to add a song to their library through the inputs of artist name, song title, genre, year and link.
+The add song feature enables the user to add a song to their library through the inputs of artist name, song title, genre, year and link.
 
 - Artist Name, Song Title
     - These inputs validates whether the user input is no longer than 40 characters long and if so asks the user to shorten the input.
 
 - Genre
-    - When the user enters a genre which is not already in the library it is extracted from the library and added to the 'genre-list', available to the user when using the [Search JukeboX](#search-jukebox) function.
+    - When the user enters a genre which is not already in the library it is extracted from the library and added to the 'genre-list', available to the user when using the [Search JukeboX](#search-jukebox) feature.
 
 - Year
     - A user must insert a year when adding a new song this enables easier searching later on and the ability to list songs from the same year. It is validated to ensure the input is an integer, 4 digits long and within the dates of 1900 to current year. Current year is used from the 'datetime' import instead of a set year to ensure app usability in the future.
@@ -39,11 +39,14 @@ When the add song process is finished the app provides a clear message that the 
 
 ### Remove Song
 
-Within the remove song function a user has the ability to search the entire library for a given song. When the song is found in the library a menu appears for the user to select from. The song they select gets deleted from the library. The final option in the menu however is always 'cancel' by hitting cancel the app restarts and no song is deleted.
+Within the remove song feature a user has the ability to search the entire library for a given song. When the song is found in the library a menu appears for the user to select from. The song they select gets deleted from the library. The final option in the menu however is always 'cancel' by hitting cancel the app restarts and no song is deleted.
 ![Remove song menu](./assets/images/remove-menu.png)
 
 ### Search JukeboX
 
-Search JukeboX allows a user to search the library using a number of different methods. 
+This featur allows a user to search the library using a number of different methods. The user can select from artist name, song title, genre and year. Here in todays world the song title and artist name can contain any characters so with these methods the app validates the length again. 
+
+However if the user selects method 'C) Genre' they are presented with a list of genres, populated by the genres in the library. The list is only populated by one instance of each genre. If the user input is not in the list they are prompted to try again and select from the list.
+![Seaarch by genre and validation](./assets/images/search-genre.png)
 
 ### Display All

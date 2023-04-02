@@ -208,7 +208,6 @@ def add_song():
     # webbrowser.open_new_tab(search)
     while True:
         add_link = input("Paste url here:\n")
-        # new_song.append(add_link)
         if link_validation(add_link):
             new_song.append(add_link)
             break
@@ -306,8 +305,8 @@ def validate_song_entry(entry, year):
     If it is it is displayed as an option.
     If it isn't it is added
     """
+    print("------------------------------------------------------------\n")
     if entry in JUKEBOX.get_all_values()[1:]:
-        print("")
         print("Song already in JukeBox!\n")
         search_library(entry[4])
     else:
@@ -357,9 +356,9 @@ def update_library(data):
     """
     Updates google sheet by adding new song
     """
-    print("Updating library...")
+    print("Updating library...\n")
     JUKEBOX.append_row(data)
-    time.sleep(2)
+    time.sleep(3)
     print("Library updated. Restarting JukeboX...\n")
     time.sleep(2)
     reboot()
@@ -451,12 +450,13 @@ def seperate_search_type(option):
             try:
                 year = int(input("Enter year between 1900 and now:\n"))
                 print("")
+
                 if validate_year(year):
-                    #
                     print(f"Searching library for {year}...\n")
+                    time.sleep(1)
                     search_library(str(year))
-                    #
                     break
+
             except ValueError:
                 print(
                     """\nNot a number! Please input a number.
@@ -524,14 +524,16 @@ def search_library(search_input):
             if search_input in data:
                 is_song_available = True
                 playlist.append(tracks)
-    display_user_playlist(playlist)
 
     if not is_song_available:
         print(
-            f"Sorry we cannot find {input} in our library. "
+            f"Sorry we cannot find {search_input} in our library. "
             f"Please try another search.\n"
         )
+        time.sleep(2)
         select_search_type()
+
+    display_user_playlist(playlist)
 
     return is_song_available
 
