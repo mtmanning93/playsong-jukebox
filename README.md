@@ -7,11 +7,23 @@ Users can store their favourite music videos all in one place and play them via 
 
 
 [Link to deployed Heroku site](https://yt-jukebox.herokuapp.com/)
+
 [Link to Github repository](https://github.com/mtmanning93/yt-jukebox)
 
 ![Responsive App](./assets/images/responsive-ytj.png)
 
-## Functions
+## Contents
+ - [App Features](#app-features)
+    - [Add Song](#add-song)
+    - [Remove Song](#remove-song)
+    - [Search JukeboX](#search-jukebox)
+    - [Display All](#display-all)
+- [Testing](#testing)
+    - [Bugs](#bugs)
+    - [Code Validation](#code-validation)
+- [Deployment](#deployment)
+
+## App Features
 
 ### Add Song
 
@@ -44,9 +56,60 @@ Within the remove song feature a user has the ability to search the entire libra
 
 ### Search JukeboX
 
-This featur allows a user to search the library using a number of different methods. The user can select from artist name, song title, genre and year. Here in todays world the song title and artist name can contain any characters so with these methods the app validates the length again. 
+- Artist Name/ Song Title Search
+
+This feature allows a user to search the library using a number of different methods. The user can select from artist name, song title, genre and year. Here in todays world the song title and artist name can contain any characters so with these methods the app validates the length again. 
+
+- Genre Search
 
 However if the user selects method 'C) Genre' they are presented with a list of genres, populated by the genres in the library. The list is only populated by one instance of each genre. If the user input is not in the list they are prompted to try again and select from the list.
-![Seaarch by genre and validation](./assets/images/search-genre.png)
+
+![Search by genre and validation](./assets/images/search-genre.png)
+
+- Year Search
+
+In search type year a user must enter a valid year as a 4 digit number. The app then searches the library if the input was valid. If the year is found a list of all songs in the year is provided, otherwise it prompts the user to search again and returns to the search type menu.
+
+![Search by year](./assets/images/search-year.png)
 
 ### Display All
+
+The final feature displayed in the main menu simply displays all songs in the library plus a 'restart' option at the bottom. From this list the user can select a song which will open the song file displaying all relevant information including the video link. Underneath a small menu is shown given the user an option to return 'home' or 'back to list' which wil return the user to the display all songs list.
+
+![Display all list](./assets/images/display-all.png) ![Song selection](./assets/images/song-selection.png)
+
+## Testing
+
+- Throughout the build the app was constantly testing using my local terminal within gitpod.
+
+- Once deployed further testing was carried out via the Code Institute Heroku terminal. No errors were displayed.
+
+### Bugs
+
+### Remaining Bugs
+
+### Code Validation
+
+- CI Linter
+
+    - Code was passed through a PEP8 linter where no errors were found
+
+![PEP8 linter](./assets/images/pep8.png)
+
+## Deployment
+
+The app was deployed with Code Institutes mock terminal on the [Heroku](https://www.heroku.com) site, steps to deployment were as follows:
+
+    - Create new Heroku app
+    - Choose app name and region
+    - In the settings
+        - Set Config Vars
+        - Add Build Packs (in this order):
+            - Python
+            - NodeJS
+    - In deploy tab
+        - Connect to ['yt-jukebox'](https://github.com/mtmanning93/yt-jukebox) Github repository
+        - Enable automatic deploys
+    - Click deploy
+
+## Credits

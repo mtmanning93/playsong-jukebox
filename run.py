@@ -47,7 +47,7 @@ def main_menu():
     Add, Remove, or Search song.
     """
     print("------------------------------------------------------------\n")
-    print("Welsome to YT JukeboX!\n")
+    print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
     while True:
         print(
