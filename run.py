@@ -38,7 +38,7 @@ def get_menu_option():
     print("------------------------------------------------------------\n")
     print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
-    print("Please begin by selecting from the menu below:\n""")
+    print("Please begin by selecting from the menu below:\n")
 
     for option, description in MENU_HANDLERS.items():
         print(option + ')', description.__name__.replace('_', ' ').title())
