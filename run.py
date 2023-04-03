@@ -106,6 +106,9 @@ def show_library():
     Shows scrollable version of entire library and displays link
     when selected. Shows restart as an option also.
 
+    params:
+        none
+
     return:
         <lst> all_songs populated if song is in library.
     """
@@ -187,7 +190,7 @@ def add_song():
 
     if add_genre not in GENRE_LIST:
         GENRE_LIST.append(add_genre.lower())
-    
+
     while True:
         try:
             add_year = input("Please enter year of release:\n")
@@ -199,7 +202,7 @@ def add_song():
                 """\nNot a number! Please input a number.
             (example 1989)\n"""
             )
-    
+
     search = (
         f'https://www.youtube.com/results?search_query='
         f'{add_artist.replace(" ", "")}+{add_title.replace(" ", "")}'
@@ -229,6 +232,12 @@ def remove_song():
     another input attempt.
     Ability to cancel remove song and return to main menu using 'c'
     as an input.
+
+    param:
+        none
+
+    return:
+        <str> input by user in order to search library
     """
     print(
         "To remove a song from JukeboX please follow the steps below. \n"
@@ -263,14 +272,19 @@ def validate_removal(val, lst):
     """
     Searches if song is in library and available to delete.
     If song is not in library returns error and displays input again.
+
+    params:
+        val: <str> the input from user.
+        lst: <list> a list of all instances of the avbove val in the library.
+
+    return:
+        <bool> true if the string is valid.
     """
-    try:
-        if val not in lst:
-            raise ValueError(
-                f"{val} not found.\n"
+    if val not in lst:
+        print(
+            f"Couldn't find input in JukeboX: {val} not found.\n"
+            f"Please try again.\n"
             )
-    except ValueError as err:
-        print(f"Couldn't find input in JukeboX:\n{err}\nPlease try again.\n")
         return False
 
     return True
