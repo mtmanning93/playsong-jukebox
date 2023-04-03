@@ -524,7 +524,8 @@ def display_user_playlist(songs):
             time.sleep(1.5)
             reboot()
             break
-
+        
+        print("---------------------------------------------------------")
         print("\n".join(chosen_song[:4]).title() + "\n")
         url = chosen_song[-1]
         print("Video link (copy and paste url):\n")
