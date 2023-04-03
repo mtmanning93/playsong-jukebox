@@ -54,6 +54,7 @@ When the add song process is finished the app provides a clear message that the 
 ### Remove Song
 
 Within the remove song feature a user has the ability to search the entire library for a given song. When the song is found in the library a menu appears for the user to select from. The song they select gets deleted from the library. The final option in the menu however is always 'cancel' by hitting cancel the app restarts and no song is deleted.
+
 ![Remove song menu](./assets/images/remove-menu.png)
 
 ### Search JukeboX
@@ -141,7 +142,7 @@ The app was deployed with Code Institutes mock terminal on the [Heroku](https://
     - `reboot()` function *run.py line: 534*
 
 - How to find the function name from a dictionary value set as a function call
-    - ['__name__'](https://stackoverflow.com/questions/58454090/how-to-find-function-name-only-in-the-dictionary)
+    - ["__ name __"](https://stackoverflow.com/questions/58454090/how-to-find-function-name-only-in-the-dictionary)
         - *run.py line: 44*
 
 ### [PyPi](https://pypi.org/project/simple-term-menu/)
