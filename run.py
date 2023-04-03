@@ -24,13 +24,6 @@ YEAR = TODAY.year
 
 GENRE_LIST = JUKEBOX.col_values(3)[1:]
 
-# MAIN_MENU = {
-#     'A': add_song(),
-#     'B': "remove song",
-#     'C': "search song",
-#     'D': "show library"
-# }
-
 # Initial user menu
 SEARCH_MENU = {
     'A': 'Artist Name',
@@ -40,18 +33,24 @@ SEARCH_MENU = {
 }
 
 
-def main_menu():
+def get_menu_option():
     """
     Main menu function enables user to select between
     Add, Remove, or Search song.
+
+    params:
+        none
+
+    return:
+        <str> one of the dictionary keys
     """
     print("------------------------------------------------------------\n")
     print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
     print("Please begin by selecting from the menu below:\n""")
     
-    for option, description in MAIN_MENU.items():
-        print(option, description.__name__.replace('_', ' ').title())
+    for option, description in MENU_HANDLERS.items():
+        print(option + ')', description.__name__.replace('_', ' ').title())
     
     print("")
 
@@ -61,7 +60,7 @@ def main_menu():
             """Please select a menu choice type from A, B, C, D:\n"""
             ).upper()
 
-        if validate_menu_choice(main_menu_choice, MAIN_MENU):
+        if validate_menu_choice(main_menu_choice, MENU_HANDLERS):
             break
 
     return main_menu_choice
@@ -69,8 +68,15 @@ def main_menu():
 
 def validate_menu_choice(value, menu):
     """
-    Inside the try checks if input is in SEARCH_MENU dict.
-    Raises error if not in dict.
+    Checks if input is in parameter dictionary.
+    Prints invalid input if not in dictionary.
+
+    param:
+        value: <str> input choice of user
+        menu: <dict> either MENU_HANDLERS or SEARCH_MENU
+
+    return:
+        <bool> true if value is in menu keys
     """
     if value not in menu.keys():
         print(f"\nInvalid input: {value} not an option.\n") 
@@ -79,20 +85,29 @@ def validate_menu_choice(value, menu):
     return True
 
 
-def get_user_option(option):
+def handle_menu_selection(option):
     """
-    Takes users main menu selection and moves to the correct funnction.
+    Takes users main menu selection and moves to the correct function.
+    
+    param:
+        option: function name from MENU_HANDLERS
+
+    return:
+        None
     """
-    menu_choice = MAIN_MENU[option]
     print("------------------------------------------------------------\n")
-    print(f"You selected to {menu_choice.__name__.replace('_', ' ')}.\n")
-    return menu_choice
+    print(f"You selected to {MENU_HANDLERS[option].__name__.replace('_', ' ')}.\n")
+    MENU_HANDLERS[option]()
+    main()
 
 
 def show_library():
     """
     Shows scrollable version of entire library and displays link
     when selected. Shows restart as an option also.
+
+    return:
+        <lst> all_songs populated if song is in library.
     """
     os.system('clear')
     all_songs = []
@@ -130,7 +145,6 @@ def show_library():
         if back_choice == 'Home':
             reboot()
         else:
-            os.system('clear')
             show_library()
 
     return all_songs
@@ -139,39 +153,41 @@ def show_library():
 def add_song():
     """
     Enables user to add songs to the library via these inputs:
-    1) artist name
-    2) song title
-    3) genre
-    4) year
-    5) url
+    artist name, song title, genre, year, url.
+    Creates a new list (new_song) which represents the new song data
+
+    params:
+        none
+    
+    return:
+        <list> new_song a list of the added data
     """
     print(
         "To add a song to JukeboX please follow the steps below. \n"
     )
-
     new_song = []
-    # Artist
+
     while True:
         add_artist = input("Please enter artist name:\n").lower()
         print("")
         if validate_length(len(add_artist)):
             new_song.append(add_artist)
             break
-    # Title
+
     while True:
         add_title = input("Please enter song title:\n")
         print("")
         if validate_length(len(add_title)):
             new_song.append(add_title)
             break
-    # Genre
+
     add_genre = input("Please enter genre:\n").lower()
     new_song.append(add_genre.lower())
     print("")
 
     if add_genre not in GENRE_LIST:
         GENRE_LIST.append(add_genre.lower())
-    # Year
+    
     while True:
         try:
             add_year = input("Please enter year of release:\n")
@@ -183,7 +199,7 @@ def add_song():
                 """\nNot a number! Please input a number.
             (example 1989)\n"""
             )
-    # Link
+    
     search = (
         f'https://www.youtube.com/results?search_query='
         f'{add_artist.replace(" ", "")}+{add_title.replace(" ", "")}'
@@ -193,7 +209,7 @@ def add_song():
     time.sleep(1)
     print(f"Link to search for video (copy/paste):\n{search}\n")
     time.sleep(2)
-    # webbrowser.open_new_tab(search)
+
     while True:
         add_link = input("Paste url here:\n")
         if link_validation(add_link):
@@ -312,7 +328,7 @@ def validate_song_entry(entry, year):
     print("------------------------------------------------------------\n")
     if entry in JUKEBOX.get_all_values()[1:]:
         print("Song already in JukeBox!\n")
-        search_library(entry[4])
+        get_songs_from_library(entry[4])
     else:
         print("Adding:\n")
         print(' - '.join(entry[:2]).title())
@@ -327,14 +343,19 @@ def validate_length(wrd):
     """
     Validates that an input string is not too long.
     Limit to 20 characters.
+
+    param:
+        wrd: <str> string
+    
+    return:
+        <bool> true if the string is valid
     """
-    try:
-        if wrd > 40:
-            raise ValueError(
-                f"Maximum 40 characters allowed. {wrd} is too long.\n"
+   
+    if wrd > 40:
+        print(
+            f"\nInvalid input: Maximum 40 characters allowed.\n"
+            f"{wrd} is too long. Please shorten your input.\n"
             )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}Please shorten your input.\n")
         return False
 
     return True
@@ -343,14 +364,15 @@ def validate_length(wrd):
 def link_validation(link):
     """
     Validates whether the input pasted into the url input is a link
+
+    param:
+        link: <url> provided by user input
+
+    return:
+        <bool> true if the string is valid
     """
-    try:
-        if not validators.url(f"{link}"):
-            raise ValueError(
-                "Not a url. "
-            )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}Please insert another url.\n")
+    if not validators.url(f"{link}"):
+        print("\nInvalid input: Not a url. Please insert another url.\n")
         return False
 
     return True
@@ -368,14 +390,14 @@ def update_library(data):
     reboot()
 
 
-def select_search_type():
+def search_library():
     """
     Search menu options.
     Provides search options for the user to select from.
     """
     print("Please select a search method from the list below:\n")
     for option, description in SEARCH_MENU.items():
-        print(option, description.title())
+        print(option + ')', description.title())
     print("")
     
     while True:
@@ -410,7 +432,7 @@ def seperate_search_type(option):
 
         print("Searching library...\n")
         time.sleep(1)
-        search_library(user_search)
+        get_songs_from_library(user_search)
 
     elif option == 'C':
         # Provide list of genres for user
@@ -431,7 +453,7 @@ def seperate_search_type(option):
                 print(f"Searching library for {genre_input.title()}...\n")
                 break
 
-        search_library(genre_input)
+        get_songs_from_library(genre_input)
 
     else:
         # Search validation for year
@@ -445,7 +467,7 @@ def seperate_search_type(option):
                 if validate_year(year):
                     print(f"Searching library for {year}...\n")
                     time.sleep(1)
-                    search_library(str(year))
+                    get_songs_from_library(str(year))
                     break
 
             except ValueError:
@@ -483,6 +505,12 @@ def validate_year(num):
     between 1900 and present year.
     and between 1900 and current year.
     Raises error if entered number is not in time frame.
+
+    param:
+        num: <int>
+
+    return:
+        <bool> true if the string is valid
     """
     try:
         if (1900 <= num <= YEAR):
@@ -499,7 +527,7 @@ def validate_year(num):
     return True
 
 
-def search_library(search_input):
+def get_songs_from_library(search_input):
     """
     Takes input information from chosen search after validation
     and searches through the library.
@@ -522,7 +550,7 @@ def search_library(search_input):
             f"Please try another search.\n"
         )
         time.sleep(2)
-        select_search_type()
+        search_library()
 
     display_user_playlist(playlist)
 
@@ -572,10 +600,10 @@ def reboot():
     os.execl(python, python, * sys.argv)
 
 
-MAIN_MENU = {
+MENU_HANDLERS = {
     'A': add_song,
     'B': remove_song,
-    'C': select_search_type,
+    'C': search_library,
     'D': show_library
 }
 
@@ -584,8 +612,9 @@ def main():
     """
     Run all program functions.
     """
-    main_choice = main_menu()
-    get_user_option(main_choice)
+    main_choice = get_menu_option()
+    handle_menu_selection(main_choice)
 
 
-main()
+if __name__ == '__main__':
+    main()
