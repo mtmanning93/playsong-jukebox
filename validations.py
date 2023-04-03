@@ -1,8 +1,9 @@
 """
 All validating functions.
 """
+import validators
+
 from utils import (
-    validators,
     GENRE_LIST,
     YEAR
 )

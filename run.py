@@ -2,22 +2,15 @@
 Main app functions.
 """
 
+import time
+import sys
+import os
+
+from simple_term_menu import TerminalMenu
+
 from utils import (
-    time,
-    datetime,
-    sys,
-    os,
-    gspread,
-    Credentials,
-    TerminalMenu,
-    CREDS,
-    SCOPED_CREDS,
-    GSPREAD_CLIENT,
-    SHEET,
     JUKEBOX,
     LIBRARY,
-    TODAY,
-    YEAR,
     GENRE_LIST,
     SEARCH_MENU
 )

@@ -1,6 +1,7 @@
 # Video JukeboX
 
 ## Intro
+
 Video JukeboX is a library for music videos, which is run in the Code Institute mock terminal on Heroku.
 
 Users can store their favourite music videos all in one place and play them via the stored link in the library. Users can add or remove songs, search through the library or display the entire library.
@@ -81,6 +82,10 @@ The final feature displayed in the main menu simply displays all songs in the li
 
 ## Future Implementations
 
+Future implementations would include an in app video or audio player. When finding a song the user will be able to play it directly in the app or at least open in a new browser tab.
+
+Following this the ability to download entire playlists created by search methods in order to player all songs uninterrupted.
+
 ## Testing
 
 - Throughout the build the app was constantly testing using my local terminal within gitpod.
@@ -89,15 +94,16 @@ The final feature displayed in the main menu simply displays all songs in the li
 
 ### Bugs
 
-### Remaining Bugs
+- Search type year
+    - Initially when searching via a year the app would not find any songs in the library to display to the user. The year input was converted to an integer, however in order to search the library it had to be converted a string.
 
 ### Code Validation
 
 - CI Linter
 
-    - Code was passed through a PEP8 linter where no errors were found
+    - All code files have been passed through a PEP8 linter where no errors were found.
 
-![PEP8 linter](./assets/images/pep8.png)
+![PEP8 linter](./assets/images/run-pep8.png)
 
 ## Deployment
 
@@ -115,13 +121,14 @@ The app was deployed with Code Institutes mock terminal on the [Heroku](https://
         - Enable automatic deploys
     - Click deploy
 
+[Link to deployed Heroku site](https://yt-jukebox.herokuapp.com/)
+
 ## Credits
 
-CI Love Sandwiches
+### Code Institute ['Love Sandwiches'](https://github.com/Code-Institute-Solutions/love-sandwiches-p5-sourcecode/blob/master/05-deployment/01-deployment-part-1/run.py)
 
-    - Wiring Google Sheets API
-    - Input validations and while loops
-    
-
-EG?
+- Wiring Google Sheets API
+    - *utils.py, line:11*
+- Input validations and while loops 
+    - *try and except (validations.py, line: 124)*  
 
