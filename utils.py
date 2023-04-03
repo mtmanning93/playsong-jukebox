@@ -1,7 +1,6 @@
 """
 Constants and imports
 """
-
 import datetime
 import gspread
 

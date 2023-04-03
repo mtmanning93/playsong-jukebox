@@ -1,7 +1,6 @@
 """
 Main app functions.
 """
-
 import time
 import sys
 import os
@@ -276,7 +275,7 @@ def get_remove_options(search):
     delete = delete_list[delete_menu]
     deleted_song = " - ".join(delete[:2]).title()
 
-    if (delete == delete_list[-1]):
+    if delete == delete_list[-1]:
         print('Restarting Jukebox...\n')
         time.sleep(2)
         reboot()

@@ -97,13 +97,16 @@ Following this the ability to download entire playlists created by search method
 - Search type year
     - Initially when searching via a year the app would not find any songs in the library to display to the user. The year input was converted to an integer, however in order to search the library it had to be converted a string.
 
+- Splitting Code
+    - When seperating the app into different files several errors appeared, the main error was an `ImportError`. On research I found this was due to circular dependency. This meant having to refactor my functions to display the same output but work in a seperate file. *(Seperated between run/ utils and validations.py)* 
+
 ### Code Validation
 
 - CI Linter
 
     - All code files have been passed through a PEP8 linter where no errors were found.
 
-![PEP8 linter](./assets/images/run-pep8.png)
+![PEP8 linter](./assets/images/pep8.png)
 
 ## Deployment
 
@@ -125,10 +128,33 @@ The app was deployed with Code Institutes mock terminal on the [Heroku](https://
 
 ## Credits
 
-### Code Institute ['Love Sandwiches'](https://github.com/Code-Institute-Solutions/love-sandwiches-p5-sourcecode/blob/master/05-deployment/01-deployment-part-1/run.py)
+### ['Love Sandwiches' by Code Institute](https://github.com/Code-Institute-Solutions/love-sandwiches-p5-sourcecode/blob/master/05-deployment/01-deployment-part-1/run.py)
 
 - Wiring Google Sheets API
     - *utils.py, line:11*
 - Input validations and while loops 
     - *try and except (validations.py, line: 124)*  
 
+### [Stack Overflow](https://stackoverflow.com/questions/14907067/how-do-i-restart-a-program-based-on-user-input)
+
+- Restarting and clearing CLI using `import os'
+    - `reboot()` function *run.py line: 534*
+
+- How to find the function name from a dictionary value set as a function call
+    - ['__name__'](https://stackoverflow.com/questions/58454090/how-to-find-function-name-only-in-the-dictionary)
+        - *run.py line: 44*
+
+### [PyPi](https://pypi.org/project/simple-term-menu/)
+
+- Simple_Term_Menu
+    - This documentation helped implement the `TerminalMenu`.
+        - *run.py line: 97*
+
+### [Programmiz](https://www.programiz.com/python-programming/time/sleep)
+
+- `time.sleep()` implementation used throughout the app.
+
+### [Validators](https://validators.readthedocs.io/en/latest/)
+
+- Used to validate the url input when adding a song to the library
+    - *validations.py line: 85*
