@@ -47,14 +47,14 @@ def get_menu_option():
     print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
     print("Please begin by selecting from the menu below:\n""")
-    
+
     for option, description in MENU_HANDLERS.items():
         print(option + ')', description.__name__.replace('_', ' ').title())
-    
+
     print("")
 
     while True:
-        
+
         main_menu_choice = input(
             """Please select a menu choice type from A, B, C, D:\n"""
             ).upper()
@@ -65,29 +65,10 @@ def get_menu_option():
     return main_menu_choice
 
 
-# def validate_menu_choice(value, menu):
-#     """
-#     Checks if input is in parameter dictionary.
-#     Prints invalid input if not in dictionary.
-
-#     param:
-#         value: <str> input choice of user
-#         menu: <dict> either MENU_HANDLERS or SEARCH_MENU
-
-#     return:
-#         <bool> true if value is in menu keys
-#     """
-#     if value not in menu.keys():
-#         print(f"\nInvalid input: {value} not an option.\n") 
-#         return False
-        
-#     return True
-
-
 def handle_menu_selection(option):
     """
     Takes users main menu selection and moves to the correct function.
-    
+
     param:
         option: function name from MENU_HANDLERS
 
@@ -95,7 +76,9 @@ def handle_menu_selection(option):
         None
     """
     print("------------------------------------------------------------\n")
-    print(f"You selected to {MENU_HANDLERS[option].__name__.replace('_', ' ')}.\n")
+    print(
+        f"You chose to {MENU_HANDLERS[option].__name__.replace('_', ' ')}.\n"
+        )
     MENU_HANDLERS[option]()
     main()
 
@@ -160,7 +143,7 @@ def add_song():
 
     params:
         none
-    
+
     return:
         <list> new_song a list of the added data
     """
@@ -258,35 +241,13 @@ def remove_song():
         for song in LIBRARY:
             if delete_song_input in song:
                 library_values += song
-    
+
         if validate_removal(delete_song_input, library_values):
             break
 
     get_remove_options(delete_song_input)
 
     return delete_song_input
-
-
-# def validate_removal(val, lst):
-#     """
-#     Searches if song is in library and available to delete.
-#     If song is not in library returns error and displays input again.
-
-#     params:
-#         val: <str> the input from user.
-#         lst: <list> a list of all instances of the avbove val in the library.
-
-#     return:
-#         <bool> true if the string is valid.
-#     """
-#     if val not in lst:
-#         print(
-#             f"Couldn't find input in JukeboX: {val} not found.\n"
-#             f"Please try again.\n"
-#             )
-#         return False
-
-#     return True
 
 
 def get_remove_options(search):
@@ -307,14 +268,14 @@ def get_remove_options(search):
         row_num = item.row
         row_info = JUKEBOX.row_values(row_num)
         delete_list.append(row_info[:2])
-    
+
     delete_list.sort()
     delete_list.append(['Cancel'])
 
     options = TerminalMenu(
             [" ".join(i[:4]).title() for i in delete_list]
             )
-        
+
     print("------------------------------------------------------------\n")
     print("Choose from the list below and press Enter to delete song:\n")
 
@@ -348,7 +309,7 @@ def search_for_duplicates(entry, year):
         entry: <lst> data of the new song
         year: <str> the year input as string to concat with list,
               reverted to integer.
-    
+
     return:
         none
     """
@@ -364,45 +325,6 @@ def search_for_duplicates(entry, year):
         entry[3] = int(year)
 
         add_song_to_library(entry)
-
-
-# def validate_length(wrd):
-#     """
-#     Validates that an input string is not too long.
-#     Limit to 20 characters.
-
-#     param:
-#         wrd: <str> string
-
-#     return:
-#         <bool> true if the string is valid
-#     """
-
-#     if wrd > 40:
-#         print(
-#             f"\nInvalid input: Maximum 40 characters allowed.\n"
-#             f"{wrd} is too long. Please shorten your input.\n"
-#             )
-#         return False
-
-#     return True
-
-
-# def link_validation(link):
-#     """
-#     Validates whether the input pasted into the url input is a link
-
-#     param:
-#         link: <url> provided by user input
-
-#     return:
-#         <bool> true if the string is valid
-#     """
-#     if not validators.url(f"{link}"):
-#         print("\nInvalid input: Not a url. Please insert another url.\n")
-#         return False
-
-#     return True
 
 
 def add_song_to_library(data):
@@ -438,9 +360,9 @@ def search_library():
     for option, description in SEARCH_MENU.items():
         print(option + ')', description.title())
     print("")
-    
+
     while True:
-        
+
         search_choice = input(
             """Please select a search type from A, B, C, D:\n"""
             ).upper()
@@ -498,7 +420,7 @@ def get_search_type(option):
         get_songs_from_library(genre_input)
 
     else:
-        # Search validation for year
+
         while True:
             try:
                 year = int(input("Enter year between 1900 and now:\n"))
@@ -521,7 +443,7 @@ def get_search_type(option):
 
 def get_genre_list():
     """
-    Populates genre list with just one instance of each genre in the 
+    Populates genre list with just one instance of each genre in the
     library.
 
     param:
@@ -531,64 +453,16 @@ def get_genre_list():
         short_genre_list: <lst> list of one instance of each genre.
     """
     short_genre_list = []
-        
+
     for genre in GENRE_LIST:
         if genre not in short_genre_list:
             short_genre_list.append(genre)
-        
+
     for item in short_genre_list:
         print(item.title())
     print("")
 
     return short_genre_list
-
-
-# def validate_genre(genre):
-#     """
-#     Validates whether the chosen genre input is in the genre list.
-
-#     param:
-#         genre: <str> users input to search.
-
-#     return:
-#         <bool> true if the string is valid.
-#     """
-#     if genre not in GENRE_LIST:
-#         print(
-#             f"\nInvalid input: {genre.title()} is not in provided options.\n"
-#             f"Please select from the genre list.\n"
-#             )
-#         return False
-
-#     return True
-
-
-# def validate_year(num):
-#     """
-#     Inside the try checks if input is a valid date
-#     between 1900 and present year.
-#     and between 1900 and current year.
-#     Raises error if entered number is not in time frame.
-
-#     param:
-#         num: <int>
-
-#     return:
-#         <bool> true if the string is valid
-#     """
-#     try:
-#         if (1900 <= num <= YEAR):
-#             print("")
-#         else:
-#             raise ValueError(
-#                 f"Numeric 4 digit year between 1900 and now required (example:"
-#                 f" 1989). {num} is not valid.\n"
-#             )
-#     except ValueError as err:
-#         print(f"\nInvalid input: {err}\n Please try again.\n")
-#         return False
-
-#     return True
 
 
 def get_songs_from_library(search_input):

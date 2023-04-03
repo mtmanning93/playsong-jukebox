@@ -21,9 +21,9 @@ def validate_menu_choice(value, menu):
         <bool> true if value is in menu keys
     """
     if value not in menu.keys():
-        print(f"\nInvalid input: {value} not an option.\n") 
+        print(f"\nInvalid input: {value} not an option.\n")
         return False
-        
+
     return True
 
 
