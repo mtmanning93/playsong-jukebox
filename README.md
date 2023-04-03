@@ -18,6 +18,7 @@ Users can store their favourite music videos all in one place and play them via 
     - [Remove Song](#remove-song)
     - [Search JukeboX](#search-jukebox)
     - [Display All](#display-all)
+- [Future Implementations](#future-implementations)
 - [Testing](#testing)
     - [Bugs](#bugs)
     - [Code Validation](#code-validation)
@@ -77,6 +78,8 @@ In search type year a user must enter a valid year as a 4 digit number. The app 
 The final feature displayed in the main menu simply displays all songs in the library plus a 'restart' option at the bottom. From this list the user can select a song which will open the song file displaying all relevant information including the video link. Underneath a small menu is shown given the user an option to return 'home' or 'back to list' which wil return the user to the display all songs list.
 
 ![Display all list](./assets/images/display-all.png) ![Song selection](./assets/images/song-selection.png)
+
+## Future Implementations
 
 ## Testing
 

@@ -2,11 +2,10 @@ import time
 import datetime
 import sys
 import os
-# import webbrowser
-import validators
 import gspread
 from google.oauth2.service_account import Credentials
 from simple_term_menu import TerminalMenu
+import validators
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -49,55 +48,51 @@ def main_menu():
     print("------------------------------------------------------------\n")
     print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
+    print("Please begin by selecting from the menu below:\n""")
+    for option, description in MAIN_MENU.items():
+        print(option, description.title())
+    print("")
+
     while True:
-        print(
-            """Please begin by selecting from the menu below:
-        \nA) Add Song\nB) Remove Song\nC) Search JukeboX\nD) Display All\n"""
-        )
+        
         main_menu_choice = input(
             """Please select a menu choice type from A, B, C, D:\n"""
             ).upper()
 
-        if validate_main_choice(main_menu_choice):
+        if validate_menu_choice(main_menu_choice, MAIN_MENU):
             break
 
     return main_menu_choice
 
 
-def validate_main_choice(value):
+def validate_menu_choice(value, menu):
     """
     Inside the try checks if input is in SEARCH_MENU dict.
     Raises error if not in dict.
     """
-    try:
-        if value not in MAIN_MENU.keys():
-            raise ValueError(
-                f"Search type A, B, C, D required. {value} is not valid.\n"
-            )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}\n Please try again.\n")
+    if value not in menu.keys():
+        print(f"\nInvalid input: {value} not an option.\n") 
         return False
-
+        
     return True
 
 
-def main_menu_selection(opt):
+def get_menu_choice(option):
     """
     Takes users main menu selection and moves to the correct funnction.
     """
-    menu_choice = MAIN_MENU[opt]
+    menu_choice = MAIN_MENU[option]
     print("------------------------------------------------------------\n")
     print(f"You selected to {menu_choice}.\n")
 
-    if opt == "A":
+    if option == "A":
         add_song()
-    elif opt == "B":
+    elif option == "B":
         remove_song()
-    elif opt == "D":
-        os.system('clear')
-        show_library(LIBRARY)
-    else:
+    elif option == "C":
         select_search_type()
+    else:
+        show_library(LIBRARY)
 
     return menu_choice
 
@@ -107,6 +102,7 @@ def show_library(information):
     Shows scrollable version of entire library and displays link
     when selected. Shows restart as an option also.
     """
+    os.system('clear')
     all_songs = []
     for info in information:
         all_songs.append(info)
@@ -250,7 +246,7 @@ def remove_song():
         if validate_removal(delete_song_input, library_values):
             break
 
-    show_delete_menu(delete_song_input)
+    removal_menu(delete_song_input)
 
     return delete_song_input
 
@@ -266,16 +262,16 @@ def validate_removal(val, lst):
                 f"{val} not found.\n"
             )
     except ValueError as err:
-        print(f"Couldn't find song in JukeboX:\n{err}\nPlease try again.\n")
+        print(f"Couldn't find input in JukeboX:\n{err}\nPlease try again.\n")
         return False
 
     return True
 
 
-def show_delete_menu(val):
+def removal_menu(val):
     """
     If song is found in library this function will display a menu
-    from which the user can choose which song to delete 
+    from which the user can choose which song to delete.
     """
     search_list = JUKEBOX.findall(val)
     delete_list = []
@@ -385,35 +381,22 @@ def select_search_type():
     Search menu options.
     Provides search options for the user to select from.
     """
+    print("Please select a search method from the list below:\n")
+    for option, description in SEARCH_MENU.items():
+        print(option, description.title())
+    print("")
+    
     while True:
-        print("""Please select a search method from the list below:
-        \nA) Artist Name\nB) Song Title\nC) Genre\nD) Year\n""")
+        
         search_choice = input(
             """Please select a search type from A, B, C, D:\n"""
             ).upper()
 
-        if validate_search_choice(search_choice):
+        if validate_menu_choice(search_choice, SEARCH_MENU):
             seperate_search_type(search_choice)
             break
 
     return search_choice
-
-
-def validate_search_choice(value):
-    """
-    Inside the try checks if input is in SEARCH_MENU dict.
-    Raises error if not in dict.
-    """
-    try:
-        if value not in SEARCH_MENU.keys():
-            raise ValueError(
-                f"Search type A, B, C, or D required. {value} is not valid.\n"
-            )
-    except ValueError as err:
-        print(f"\nInvalid input: {err}\n Please try again.\n")
-        return False
-
-    return True
 
 
 def seperate_search_type(option):
@@ -602,10 +585,6 @@ def main():
     Run all program functions.
     """
     main_choice = main_menu()
-    main_menu_selection(main_choice)
-    add_song()
-    search_choice = select_search_type()
-    seperate_search_type(search_choice)
-
+    get_menu_choice(main_choice)
 
 main()
