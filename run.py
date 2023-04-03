@@ -24,12 +24,12 @@ YEAR = TODAY.year
 
 GENRE_LIST = JUKEBOX.col_values(3)[1:]
 
-MAIN_MENU = {
-    'A': "add song",
-    'B': "remove song",
-    'C': "search song",
-    'D': "show library"
-}
+# MAIN_MENU = {
+#     'A': add_song(),
+#     'B': "remove song",
+#     'C': "search song",
+#     'D': "show library"
+# }
 
 # Initial user menu
 SEARCH_MENU = {
@@ -49,8 +49,10 @@ def main_menu():
     print("Welcome to Video JukeboX!\n")
     print("------------------------------------------------------------")
     print("Please begin by selecting from the menu below:\n""")
+    
     for option, description in MAIN_MENU.items():
-        print(option, description.title())
+        print(option, description.__name__.replace('_', ' ').title())
+    
     print("")
 
     while True:
@@ -77,34 +79,24 @@ def validate_menu_choice(value, menu):
     return True
 
 
-def get_menu_choice(option):
+def get_user_option(option):
     """
     Takes users main menu selection and moves to the correct funnction.
     """
     menu_choice = MAIN_MENU[option]
     print("------------------------------------------------------------\n")
-    print(f"You selected to {menu_choice}.\n")
-
-    if option == "A":
-        add_song()
-    elif option == "B":
-        remove_song()
-    elif option == "C":
-        select_search_type()
-    else:
-        show_library(LIBRARY)
-
+    print(f"You selected to {menu_choice.__name__.replace('_', ' ')}.\n")
     return menu_choice
 
 
-def show_library(information):
+def show_library():
     """
     Shows scrollable version of entire library and displays link
     when selected. Shows restart as an option also.
     """
     os.system('clear')
     all_songs = []
-    for info in information:
+    for info in LIBRARY:
         all_songs.append(info)
 
     all_songs.sort()
@@ -139,7 +131,7 @@ def show_library(information):
             reboot()
         else:
             os.system('clear')
-            show_library(LIBRARY)
+            show_library()
 
     return all_songs
 
@@ -580,11 +572,20 @@ def reboot():
     os.execl(python, python, * sys.argv)
 
 
+MAIN_MENU = {
+    'A': add_song,
+    'B': remove_song,
+    'C': select_search_type,
+    'D': show_library
+}
+
+
 def main():
     """
     Run all program functions.
     """
     main_choice = main_menu()
-    get_menu_choice(main_choice)
+    get_user_option(main_choice)
+
 
 main()
