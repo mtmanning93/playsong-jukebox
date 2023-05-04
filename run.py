@@ -246,7 +246,7 @@ def remove_song():
 
             if validate_removal(delete_song_input, library_values):
                 break
-    
+
     get_remove_options(delete_song_input)
 
     return delete_song_input
@@ -459,6 +459,8 @@ def get_genre_list():
     for genre in GENRE_LIST:
         if genre not in short_genre_list:
             short_genre_list.append(genre)
+
+    short_genre_list.sort()
 
     for item in short_genre_list:
         print(item.title())
