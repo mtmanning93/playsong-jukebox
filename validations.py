@@ -123,7 +123,7 @@ def validate_year(num):
         <bool> true if the string is valid
     """
     try:
-        if (1900 <= num <= YEAR):
+        if 1900 <= num <= YEAR:
             print("")
         else:
             raise ValueError(

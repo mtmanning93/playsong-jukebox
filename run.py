@@ -37,7 +37,13 @@ def get_menu_option():
         <str> one of the dictionary keys
     """
     print("------------------------------------------------------------\n")
-    print("Welcome to Video JukeboX!\n")
+    print("Welcome to...")
+    print("__      ___     _       _       _        _         __   ___")
+    print("\ \    / (_)   | |     | |     | |      | |        \ \ / | |")
+    print(" \ \  / / _  __| |     | |_   _| | _____| |__   ___ \ V /| |")
+    print("  \ \/ / | |/ _` | _   | | | | | |/ / _ | '_ \ / _ \ > < | |")
+    print("   \  /  | | (_| || |__| | |_| |   |  __| |_) | (_) / . \|_|")
+    print("    \/   |_|\__,_| \____/ \__,_|_|\_\___|_.__/ \___/_/ \_(_)\n")
     print("------------------------------------------------------------")
     print("Please begin by selecting from the menu below:\n")
 
