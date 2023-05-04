@@ -20,7 +20,8 @@ from validations import (
     validate_genre,
     validate_removal,
     validate_year,
-    link_validation
+    link_validation,
+    validate_empty_input
 )
 
 
@@ -49,7 +50,7 @@ def get_menu_option():
 
         main_menu_choice = input(
             """Please select a menu choice type from A, B, C, D:\n"""
-            ).upper()
+        ).upper()
 
         if validate_menu_choice(main_menu_choice, MENU_HANDLERS):
             break
@@ -70,7 +71,7 @@ def handle_menu_selection(option):
     print("------------------------------------------------------------\n")
     print(
         f"You chose to {MENU_HANDLERS[option].__name__.replace('_', ' ')}.\n"
-        )
+    )
     MENU_HANDLERS[option]()
     main()
 
@@ -96,7 +97,7 @@ def show_library():
 
     show_all_menu = TerminalMenu(
         [" - ".join(song[:2]).title() for song in all_songs]
-        )
+    )
 
     menu = show_all_menu.show()
     library_choice = all_songs[menu]
@@ -147,20 +148,29 @@ def add_song():
     while True:
         add_artist = input("Please enter artist name:\n").lower()
         print("")
-        if validate_length(len(add_artist)):
+        if (
+            validate_length(len(add_artist)) and
+            validate_empty_input(add_artist)
+        ):
             new_song.append(add_artist)
             break
 
     while True:
         add_title = input("Please enter song title:\n")
         print("")
-        if validate_length(len(add_title)):
+        if (
+            validate_length(len(add_title)) and
+            validate_empty_input(add_title)
+        ):
             new_song.append(add_title)
             break
-
-    add_genre = input("Please enter genre:\n").lower()
-    new_song.append(add_genre.lower())
-    print("")
+        
+    while True:
+        add_genre = input("Please enter genre:\n").lower()
+        if validate_empty_input(add_genre):
+            new_song.append(add_genre.lower())
+            print("")
+            break
 
     if add_genre not in GENRE_LIST:
         GENRE_LIST.append(add_genre.lower())
@@ -180,7 +190,7 @@ def add_song():
     search = (
         f'https://www.youtube.com/results?search_query='
         f'{add_artist.replace(" ", "")}+{add_title.replace(" ", "")}'
-        )
+    )
     print("Use the search link to find a video of your choice.")
     print("Then copy and paste the link below.\n")
     time.sleep(1)
@@ -220,7 +230,7 @@ def remove_song():
 
         delete_song_input = input(
             "Enter some song information to remove ((c) cancel):\n"
-            ).lower()
+        ).lower()
         print("")
 
         if delete_song_input == 'c':
@@ -265,8 +275,8 @@ def get_remove_options(search):
     delete_list.append(['Cancel'])
 
     options = TerminalMenu(
-            [" ".join(i[:4]).title() for i in delete_list]
-            )
+        [" ".join(i[:4]).title() for i in delete_list]
+    )
 
     print("------------------------------------------------------------\n")
     print("Choose from the list below and press Enter to delete song:\n")
@@ -357,7 +367,7 @@ def search_library():
 
         search_choice = input(
             """Please select a search type from A, B, C, D:\n"""
-            ).upper()
+        ).upper()
 
         if validate_menu_choice(search_choice, SEARCH_MENU):
             get_search_type(search_choice)
@@ -509,7 +519,7 @@ def display_user_playlist(songs):
     songs.append(['Restart'])
     playlist_menu = TerminalMenu(
         [" ".join(song[:4]).title() for song in songs]
-        )
+    )
 
     restart = False
 
@@ -524,7 +534,7 @@ def display_user_playlist(songs):
             time.sleep(1.5)
             reboot()
             break
-        
+
         print("---------------------------------------------------------")
         print("\n".join(chosen_song[:4]).title() + "\n")
         url = chosen_song[-1]

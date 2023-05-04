@@ -135,3 +135,17 @@ def validate_year(num):
         return False
 
     return True
+
+
+def validate_empty_input(val):
+    """
+    Validates whether or not the entry has a value.
+    If not it throws an error.
+    """
+    if (val == ""):
+        print(
+            "No data input. Please insert some data.\n"
+            )
+        return False
+
+    return True
