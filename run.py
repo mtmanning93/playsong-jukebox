@@ -238,15 +238,15 @@ def remove_song():
             time.sleep(2)
             reboot()
 
-        library_values = []
+        if validate_empty_input(delete_song_input):
+            library_values = []
+            for song in LIBRARY:
+                if delete_song_input in song:
+                    library_values += song
 
-        for song in LIBRARY:
-            if delete_song_input in song:
-                library_values += song
-
-        if validate_removal(delete_song_input, library_values):
-            break
-
+            if validate_removal(delete_song_input, library_values):
+                break
+    
     get_remove_options(delete_song_input)
 
     return delete_song_input
