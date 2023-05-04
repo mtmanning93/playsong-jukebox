@@ -164,7 +164,7 @@ def add_song():
         ):
             new_song.append(add_title)
             break
-        
+
     while True:
         add_genre = input("Please enter genre:\n").lower()
         if validate_empty_input(add_genre):
